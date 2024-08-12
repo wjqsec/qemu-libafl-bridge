@@ -18,7 +18,12 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
+//// --- Begin LibAFL code ---
 
+#include "libafl/hook.h"
+
+
+//// --- End LibAFL code ---
 /* warning: addr must be aligned */
 static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
     hwaddr addr, MemTxAttrs attrs, MemTxResult *result,
@@ -40,6 +45,13 @@ static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
         /* I/O case */
         r = memory_region_dispatch_read(mr, addr1, &val,
                                         MO_32 | devend_memop(endian), attrs);
+        //// --- Begin LibAFL code ---
+        if (libafl_post_devicereg_read_hooks)
+        {
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val, 1);
+        }
+        //// --- End LibAFL code ---
+
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 4, mr);
@@ -109,6 +121,12 @@ static inline uint64_t glue(address_space_ldq_internal, SUFFIX)(ARG1_DECL,
         /* I/O case */
         r = memory_region_dispatch_read(mr, addr1, &val,
                                         MO_64 | devend_memop(endian), attrs);
+        //// --- Begin LibAFL code ---
+        if (libafl_post_devicereg_read_hooks)
+        {
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val, 1);
+        }
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 8, mr);
@@ -175,6 +193,12 @@ uint8_t glue(address_space_ldub, SUFFIX)(ARG1_DECL,
 
         /* I/O case */
         r = memory_region_dispatch_read(mr, addr1, &val, MO_8, attrs);
+        //// --- Begin LibAFL code ---
+        if (libafl_post_devicereg_read_hooks)
+        {
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val, 1);
+        }
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 1, mr);
@@ -213,6 +237,12 @@ static inline uint16_t glue(address_space_lduw_internal, SUFFIX)(ARG1_DECL,
         /* I/O case */
         r = memory_region_dispatch_read(mr, addr1, &val,
                                         MO_16 | devend_memop(endian), attrs);
+        //// --- Begin LibAFL code ---
+        if (libafl_post_devicereg_read_hooks)
+        {
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val, 1);
+        }
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 2, mr);
@@ -279,8 +309,16 @@ void glue(address_space_stl_notdirty, SUFFIX)(ARG1_DECL,
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
     if (l < 4 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
-
-        r = memory_region_dispatch_write(mr, addr1, val, MO_32, attrs);
+        //// --- Begin LibAFL code ---
+        bool ret = true;
+        if (libafl_pre_devicereg_write_hooks)
+        {
+            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val);
+            r = MEMTX_OK;
+        }  
+        if (ret)
+            r = memory_region_dispatch_write(mr, addr1, val, MO_32, attrs);
+        //// --- End LibAFL code ---
     } else {
         ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
         stl_p(ptr, val);
@@ -316,8 +354,17 @@ static inline void glue(address_space_stl_internal, SUFFIX)(ARG1_DECL,
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
     if (l < 4 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
-        r = memory_region_dispatch_write(mr, addr1, val,
+        //// --- Begin LibAFL code ---
+        bool ret = true;
+        if (libafl_pre_devicereg_write_hooks)
+        {
+            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val);
+            r = MEMTX_OK;
+        }  
+        if (ret)
+            r = memory_region_dispatch_write(mr, addr1, val,
                                          MO_32 | devend_memop(endian), attrs);
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
@@ -379,7 +426,16 @@ void glue(address_space_stb, SUFFIX)(ARG1_DECL,
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
     if (!memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
-        r = memory_region_dispatch_write(mr, addr1, val, MO_8, attrs);
+        //// --- Begin LibAFL code ---
+        bool ret = true;
+        if (libafl_pre_devicereg_write_hooks)
+        {
+            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val);
+            r = MEMTX_OK;
+        }  
+        if (ret)
+            r = memory_region_dispatch_write(mr, addr1, val, MO_8, attrs);
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
@@ -412,8 +468,17 @@ static inline void glue(address_space_stw_internal, SUFFIX)(ARG1_DECL,
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
     if (l < 2 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
-        r = memory_region_dispatch_write(mr, addr1, val,
+        //// --- Begin LibAFL code ---
+        bool ret = true;
+        if (libafl_pre_devicereg_write_hooks)
+        {
+            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val);
+            r = MEMTX_OK;
+        }  
+        if (ret)
+            r = memory_region_dispatch_write(mr, addr1, val,
                                          MO_16 | devend_memop(endian), attrs);
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
@@ -476,8 +541,17 @@ static void glue(address_space_stq_internal, SUFFIX)(ARG1_DECL,
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
     if (l < 8 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
-        r = memory_region_dispatch_write(mr, addr1, val,
+        //// --- Begin LibAFL code ---
+        bool ret = true;
+        if (libafl_pre_devicereg_write_hooks)
+        {
+            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val);
+            r = MEMTX_OK;
+        }  
+        if (ret)
+            r = memory_region_dispatch_write(mr, addr1, val,
                                          MO_64 | devend_memop(endian), attrs);
+        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         ptr = qemu_map_ram_ptr(mr->ram_block, addr1);

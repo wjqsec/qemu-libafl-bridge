@@ -225,3 +225,21 @@ size_t libafl_add_new_thread_hook(bool (*callback)(uint64_t data, uint32_t tid),
 int libafl_qemu_remove_new_thread_hook(size_t num);
 
 void libafl_tcg_gen_asan(TCGTemp * addr, size_t size);
+
+
+struct libafl_post_devicereg_read_hook {
+    void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool handled);
+    uint64_t data;
+};
+extern struct libafl_post_devicereg_read_hook* libafl_post_devicereg_read_hooks;
+size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool handled),
+                                        uint64_t data);
+
+
+struct libafl_pre_devicereg_write_hook { 
+    bool (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val);
+    uint64_t data;
+};
+extern struct libafl_pre_devicereg_write_hook* libafl_pre_devicereg_write_hooks;
+size_t libafl_add_pre_devicereg_write_hook(bool (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val), 
+                                        uint64_t data);

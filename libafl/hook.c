@@ -743,3 +743,37 @@ void libafl_tcg_gen_asan(TCGTemp * addr, size_t size)
     tcg_gen_tl_ptr(test_ptr, test_addr);
     tcg_gen_st8_tl(shadow_val, test_ptr, 0);
 }
+
+struct libafl_post_devicereg_read_hook* libafl_post_devicereg_read_hooks;
+size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool handled),
+                                        uint64_t data)
+{
+    CPUState *cpu;
+    CPU_FOREACH(cpu) {
+        tb_flush(cpu);
+    }
+
+    struct libafl_post_devicereg_read_hook *hook = calloc(sizeof(struct libafl_post_devicereg_read_hook),1);
+    hook->data = data;
+    hook->callback = callback;
+
+    libafl_post_devicereg_read_hooks = hook;
+    return 1;
+}
+
+
+struct libafl_pre_devicereg_write_hook* libafl_pre_devicereg_write_hooks;
+size_t libafl_add_pre_devicereg_write_hook(bool (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val), 
+                                        uint64_t data)
+{
+    CPUState *cpu;
+    CPU_FOREACH(cpu) {
+        tb_flush(cpu);
+    }
+    struct libafl_pre_devicereg_write_hook *hook = calloc(sizeof(struct libafl_pre_devicereg_write_hook),1);
+    hook->data = data;
+    hook->callback = callback;
+
+    libafl_pre_devicereg_write_hooks = hook;
+    return 1;
+}
