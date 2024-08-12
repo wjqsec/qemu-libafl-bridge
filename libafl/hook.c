@@ -760,7 +760,17 @@ size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, targe
     libafl_post_devicereg_read_hooks = hook;
     return 1;
 }
-
+int libafl_qemu_remove_post_devicereg_read_hook(size_t num)
+{
+    if ( num != 1 )
+        return 0;
+    if (libafl_post_devicereg_read_hooks)
+    {
+        free(libafl_post_devicereg_read_hooks);
+        libafl_post_devicereg_read_hooks = 0;
+    }
+    return 0;
+}
 
 struct libafl_pre_devicereg_write_hook* libafl_pre_devicereg_write_hooks;
 size_t libafl_add_pre_devicereg_write_hook(bool (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val), 
@@ -776,4 +786,15 @@ size_t libafl_add_pre_devicereg_write_hook(bool (*callback)(uint64_t data, targe
 
     libafl_pre_devicereg_write_hooks = hook;
     return 1;
+}
+int libafl_qemu_remove_pre_devicereg_write_hook(size_t num)
+{
+    if ( num != 1 )
+        return 0;
+    if (libafl_pre_devicereg_write_hooks)
+    {
+        free(libafl_pre_devicereg_write_hooks);
+        libafl_pre_devicereg_write_hooks = 0;
+    }
+    return 0;
 }
