@@ -187,7 +187,7 @@ void translator_loop(CPUState *cpu, TranslationBlock *tb, int *max_insns,
 #endif
             tcg_temp_free_i64(tmp0);
         }
-        printf("aaaaaaa %x", db->pc_next);
+        printf("aaaaaaa %llx", db->pc_next);
         struct libafl_breakpoint* bp = libafl_qemu_breakpoints;
         while (bp) {
             printf("bbbbbbbbbbbbb\n");
