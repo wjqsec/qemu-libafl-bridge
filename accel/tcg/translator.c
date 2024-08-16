@@ -187,9 +187,10 @@ void translator_loop(CPUState *cpu, TranslationBlock *tb, int *max_insns,
 #endif
             tcg_temp_free_i64(tmp0);
         }
-        exit(0);
+        printf("aaaaaaa %x", db->pc_next);
         struct libafl_breakpoint* bp = libafl_qemu_breakpoints;
         while (bp) {
+            printf("bbbbbbbbbbbbb\n");
             if (bp->addr == db->pc_next) {
                 TCGv_i64 tmp0 = tcg_constant_i64((uint64_t)db->pc_next);
                 gen_helper_libafl_qemu_handle_breakpoint(tcg_env, tmp0);
@@ -197,7 +198,7 @@ void translator_loop(CPUState *cpu, TranslationBlock *tb, int *max_insns,
             }
             bp = bp->next;
         }
-
+        exit(0);
         libafl_gen_cur_pc = db->pc_next;
 
         // 0x0f, 0x3a, 0xf2, 0x44
