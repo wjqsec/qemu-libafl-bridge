@@ -187,7 +187,7 @@ void translator_loop(CPUState *cpu, TranslationBlock *tb, int *max_insns,
 #endif
             tcg_temp_free_i64(tmp0);
         }
-
+        exit(0);
         struct libafl_breakpoint* bp = libafl_qemu_breakpoints;
         while (bp) {
             if (bp->addr == db->pc_next) {
