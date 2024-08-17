@@ -53,7 +53,7 @@ struct libafl_exit_reason {
 // Only makes sense to call if an exit was expected
 // Will return NULL if there was no exit expected.
 CPUState* libafl_last_exit_cpu(void);
-
+CPUState* libafl_get_first_cpu(void);
 void libafl_exit_signal_vm_start(void);
 bool libafl_exit_asap(void);
 void libafl_sync_exit_cpu(void);
@@ -62,3 +62,4 @@ void libafl_exit_request_internal(CPUState* cpu, uint64_t pc, ShutdownCause caus
 void libafl_exit_request_sync_backdoor(CPUState* cpu, target_ulong pc);
 void libafl_exit_request_breakpoint(CPUState* cpu, target_ulong pc);
 struct libafl_exit_reason* libafl_get_exit_reason(void);
+

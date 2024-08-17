@@ -96,7 +96,10 @@ CPUState* libafl_last_exit_cpu(void)
 
     return NULL;
 }
-
+CPUState* libafl_get_first_cpu(void)
+{
+    return qemu_get_cpu(0);
+}
 void libafl_exit_request_internal(CPUState* cpu, uint64_t pc, ShutdownCause cause, int signal)
 {
     last_exit_reason.kind = INTERNAL;
