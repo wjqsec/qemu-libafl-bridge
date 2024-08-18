@@ -310,13 +310,13 @@ void glue(address_space_stl_notdirty, SUFFIX)(ARG1_DECL,
     if (l < 4 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
         //// --- Begin LibAFL code ---
-        bool ret = true;
+        bool handled = false;
         if (libafl_pre_devicereg_write_hooks)
         {
-            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val);
+            libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val, &handled);
             r = MEMTX_OK;
         }  
-        if (ret)
+        if (!handled)
             r = memory_region_dispatch_write(mr, addr1, val, MO_32, attrs);
         //// --- End LibAFL code ---
     } else {
@@ -355,13 +355,13 @@ static inline void glue(address_space_stl_internal, SUFFIX)(ARG1_DECL,
     if (l < 4 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
         //// --- Begin LibAFL code ---
-        bool ret = true;
+        bool handled = false;
         if (libafl_pre_devicereg_write_hooks)
         {
-            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val);
+            libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val, &handled);
             r = MEMTX_OK;
         }  
-        if (ret)
+        if (!handled)
             r = memory_region_dispatch_write(mr, addr1, val,
                                          MO_32 | devend_memop(endian), attrs);
         //// --- End LibAFL code ---
@@ -427,13 +427,13 @@ void glue(address_space_stb, SUFFIX)(ARG1_DECL,
     if (!memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
         //// --- Begin LibAFL code ---
-        bool ret = true;
+        bool handled = false;
         if (libafl_pre_devicereg_write_hooks)
         {
-            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val);
+            libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val, &handled);
             r = MEMTX_OK;
         }  
-        if (ret)
+        if (!handled)
             r = memory_region_dispatch_write(mr, addr1, val, MO_8, attrs);
         //// --- End LibAFL code ---
     } else {
@@ -469,13 +469,13 @@ static inline void glue(address_space_stw_internal, SUFFIX)(ARG1_DECL,
     if (l < 2 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
         //// --- Begin LibAFL code ---
-        bool ret = true;
+        bool handled = false;
         if (libafl_pre_devicereg_write_hooks)
         {
-            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val);
+            libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val, &handled);
             r = MEMTX_OK;
         }  
-        if (ret)
+        if (!handled)
             r = memory_region_dispatch_write(mr, addr1, val,
                                          MO_16 | devend_memop(endian), attrs);
         //// --- End LibAFL code ---
@@ -542,13 +542,13 @@ static void glue(address_space_stq_internal, SUFFIX)(ARG1_DECL,
     if (l < 8 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
         //// --- Begin LibAFL code ---
-        bool ret = true;
+        bool handled = false;
         if (libafl_pre_devicereg_write_hooks)
         {
-            ret = libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val);
+            libafl_pre_devicereg_write_hooks->callback(libafl_pre_devicereg_write_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val, &handled);
             r = MEMTX_OK;
         }  
-        if (ret)
+        if (!handled)
             r = memory_region_dispatch_write(mr, addr1, val,
                                          MO_64 | devend_memop(endian), attrs);
         //// --- End LibAFL code ---

@@ -238,10 +238,10 @@ int libafl_qemu_remove_post_devicereg_read_hook(size_t num, int invalidate);
 
 
 struct libafl_pre_devicereg_write_hook { 
-    bool (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val);
+    void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool *handled);
     uint64_t data;
 };
 extern struct libafl_pre_devicereg_write_hook* libafl_pre_devicereg_write_hooks;
-size_t libafl_add_pre_devicereg_write_hook(bool (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val), 
+size_t libafl_add_pre_devicereg_write_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool *handled), 
                                         uint64_t data);
 int libafl_qemu_remove_pre_devicereg_write_hook(size_t num, int invalidate);
