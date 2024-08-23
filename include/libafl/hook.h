@@ -228,11 +228,11 @@ void libafl_tcg_gen_asan(TCGTemp * addr, size_t size);
 
 
 struct libafl_post_devicereg_read_hook {
-    void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool handled);
+    void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, uint32_t handled);
     uint64_t data;
 };
 extern struct libafl_post_devicereg_read_hook* libafl_post_devicereg_read_hooks;
-size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool handled),
+size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, uint32_t handled),
                                         uint64_t data);
 int libafl_qemu_remove_post_devicereg_read_hook(size_t num, int invalidate);
 
