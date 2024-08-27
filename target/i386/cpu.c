@@ -6089,7 +6089,6 @@ void cpu_x86_cpuid(CPUX86State *env, uint32_t index, uint32_t count,
     case 4:
         /* cache info: needed for Core compatibility */
         if (cpu->cache_info_passthrough) {
-            printf("111111111111111\n");
             x86_cpu_get_cache_cpuid(index, count, eax, ebx, ecx, edx);
             /*
              * QEMU has its own number of cores/logical cpus,
@@ -6106,10 +6105,8 @@ void cpu_x86_cpuid(CPUX86State *env, uint32_t index, uint32_t count,
                 }
             }
         } else if (cpu->vendor_cpuid_only && IS_AMD_CPU(env)) {
-            printf("22222222222222222\n");
-            *eax = *ebx = *ecx = *edx = 0;
+            *eax = *ebx = *ecx = *edx = 0x60;
         } else {
-            printf("3333333333333  %d\n",count);
             *eax = 0;
             switch (count) {
             case 0: /* L1 dcache info */
