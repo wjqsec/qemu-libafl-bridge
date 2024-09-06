@@ -23,7 +23,7 @@
 #include "exec/helper-proto.h"
 #include "exec/exec-all.h"
 #include "helper-tcg.h"
-
+#include "libafl/hook.h"
 /*
  * NOTE: the translator must set DisasContext.cc_op to CC_OP_EFLAGS
  * after generating a call to a helper that uses this.
@@ -55,6 +55,12 @@ void helper_cpuid(CPUX86State *env)
 
     cpu_x86_cpuid(env, (uint32_t)env->regs[R_EAX], (uint32_t)env->regs[R_ECX],
                   &eax, &ebx, &ecx, &edx);
+    //// --- Begin LibAFL code ---
+    if(libafl_post_cpuid_hooks)
+    {
+        libafl_post_cpuid_hooks->callback(libafl_post_cpuid_hooks->data, (uint32_t)env->regs[R_EAX], &eax, &ebx, &ecx, &edx);
+    }
+    //// --- End LibAFL code ---
     env->regs[R_EAX] = eax;
     env->regs[R_EBX] = ebx;
     env->regs[R_ECX] = ecx;

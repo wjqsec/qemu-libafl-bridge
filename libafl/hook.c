@@ -789,3 +789,73 @@ int libafl_qemu_remove_pre_devicereg_write_hook(size_t num, int invalidate)
     }
     return 0;
 }
+
+struct libafl_post_cpuid_hook* libafl_post_cpuid_hooks;
+size_t libafl_add_post_cpuid_hook(void (*callback)(uint64_t data,uint32_t in_eax, uint32_t *out_eax, uint32_t *out_ebx, uint32_t *out_ecx, uint32_t *out_edx),
+                                        uint64_t data)
+{
+    struct libafl_post_cpuid_hook *hook = calloc(sizeof(struct libafl_post_cpuid_hook),1);
+    hook->data = data;
+    hook->callback = callback;
+
+    libafl_post_cpuid_hooks = hook;
+    return 1;
+}
+int libafl_qemu_remove_post_cpuid_hook(size_t num, int invalidate)
+{
+    if ( num != 1 )
+        return 0;
+    if (libafl_post_cpuid_hooks)
+    {
+        free(libafl_post_cpuid_hooks);
+        libafl_post_cpuid_hooks = 0;
+    }
+    return 0;
+}
+
+
+struct libafl_post_rdmsr_hook* libafl_post_rdmsr_hooks;
+size_t libafl_add_post_rdmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *out_eax, uint32_t *out_edx),
+                                        uint64_t data)
+{
+    struct libafl_post_rdmsr_hook *hook = calloc(sizeof(struct libafl_post_rdmsr_hook),1);
+    hook->data = data;
+    hook->callback = callback;
+
+    libafl_post_rdmsr_hooks = hook;
+    return 1;
+}
+int libafl_qemu_remove_post_rdmsr_hook(size_t num, int invalidate)
+{
+    if ( num != 1 )
+        return 0;
+    if (libafl_post_rdmsr_hooks)
+    {
+        free(libafl_post_rdmsr_hooks);
+        libafl_post_rdmsr_hooks = 0;
+    }
+    return 0;
+}
+
+struct libafl_pre_wrmsr_hook* libafl_pre_wrmsr_hooks;
+size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx),
+                                        uint64_t data)
+{
+    struct libafl_pre_wrmsr_hook *hook = calloc(sizeof(struct libafl_pre_wrmsr_hook),1);
+    hook->data = data;
+    hook->callback = callback;
+
+    libafl_pre_wrmsr_hooks = hook;
+    return 1;
+}
+int libafl_qemu_remove_pre_wrmsr_hook(size_t num, int invalidate)
+{
+    if ( num != 1 )
+        return 0;
+    if (libafl_pre_wrmsr_hooks)
+    {
+        free(libafl_pre_wrmsr_hooks);
+        libafl_pre_wrmsr_hooks = 0;
+    }
+    return 0;
+}

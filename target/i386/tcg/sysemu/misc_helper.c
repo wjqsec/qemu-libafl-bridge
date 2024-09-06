@@ -26,7 +26,7 @@
 #include "exec/exec-all.h"
 #include "tcg/helper-tcg.h"
 #include "hw/i386/apic.h"
-
+#include "libafl/hook.h"
 void helper_outb(CPUX86State *env, uint32_t port, uint32_t data)
 {
     address_space_stb(&address_space_io, port, data,
@@ -144,6 +144,13 @@ void helper_wrmsr(CPUX86State *env)
     CPUState *cs = env_cpu(env);
 
     cpu_svm_check_intercept_param(env, SVM_EXIT_MSR, 1, GETPC());
+
+    //// --- Begin LibAFL code ---
+    if(libafl_pre_wrmsr_hooks)
+    {
+        libafl_pre_wrmsr_hooks->callback(libafl_pre_wrmsr_hooks->data, env->regs[R_ECX], &env->regs[R_EAX], &env->regs[R_EDX]);
+    }
+    //// --- End LibAFL code ---
 
     val = ((uint32_t)env->regs[R_EAX]) |
         ((uint64_t)((uint32_t)env->regs[R_EDX]) << 32);
@@ -509,6 +516,12 @@ void helper_rdmsr(CPUX86State *env)
     }
     env->regs[R_EAX] = (uint32_t)(val);
     env->regs[R_EDX] = (uint32_t)(val >> 32);
+    //// --- Begin LibAFL code ---
+    if(libafl_post_rdmsr_hooks)
+    {
+        libafl_post_rdmsr_hooks->callback(libafl_post_rdmsr_hooks->data, env->regs[R_ECX], &env->regs[R_EAX], &env->regs[R_EDX]);
+    }
+    //// --- End LibAFL code ---
 }
 
 void helper_flush_page(CPUX86State *env, target_ulong addr)
