@@ -250,7 +250,7 @@ int libafl_qemu_remove_pre_devicereg_write_hook(size_t num, int invalidate);
 struct libafl_post_cpuid_hook {
     void (*callback)(uint64_t data, uint32_t in_eax, uint32_t *out_eax, uint32_t *out_ebx, uint32_t *out_ecx, uint32_t *out_edx);
     uint64_t data;
-}
+};
 extern struct libafl_post_cpuid_hook* libafl_post_cpuid_hooks;
 size_t libafl_add_post_cpuid_hook(void (*callback)(uint64_t data,uint32_t in_eax, uint32_t *out_eax, uint32_t *out_ebx, uint32_t *out_ecx, uint32_t *out_edx),
                                         uint64_t data);
@@ -259,7 +259,7 @@ int libafl_qemu_remove_post_cpuid_hook(size_t num, int invalidate);
 struct libafl_post_rdmsr_hook {
     void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *out_eax, uint32_t *out_edx);
     uint64_t data;
-}
+};
 extern struct libafl_post_rdmsr_hook* libafl_post_rdmsr_hooks;
 size_t libafl_add_post_rdmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *out_eax, uint32_t *out_edx),
                                         uint64_t data);
@@ -268,7 +268,7 @@ int libafl_qemu_remove_post_rdmsr_hook(size_t num, int invalidate);
 struct libafl_pre_wrmsr_hook {
     void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx);
     uint64_t data;
-}
+};
 extern struct libafl_pre_wrmsr_hook* libafl_pre_wrmsr_hooks;
 size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx),
                                         uint64_t data);
