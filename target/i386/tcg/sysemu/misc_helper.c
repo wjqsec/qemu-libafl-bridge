@@ -148,7 +148,7 @@ void helper_wrmsr(CPUX86State *env)
     //// --- Begin LibAFL code ---
     if(libafl_pre_wrmsr_hooks)
     {
-        libafl_pre_wrmsr_hooks->callback(libafl_pre_wrmsr_hooks->data, env->regs[R_ECX], &env->regs[R_EAX], &env->regs[R_EDX]);
+        libafl_pre_wrmsr_hooks->callback(libafl_pre_wrmsr_hooks->data, env->regs[R_ECX], (uint32_t*)&env->regs[R_EAX], (uint32_t*)&env->regs[R_EDX]);
     }
     //// --- End LibAFL code ---
 
@@ -519,7 +519,7 @@ void helper_rdmsr(CPUX86State *env)
     //// --- Begin LibAFL code ---
     if(libafl_post_rdmsr_hooks)
     {
-        libafl_post_rdmsr_hooks->callback(libafl_post_rdmsr_hooks->data, env->regs[R_ECX], &env->regs[R_EAX], &env->regs[R_EDX]);
+        libafl_post_rdmsr_hooks->callback(libafl_post_rdmsr_hooks->data, env->regs[R_ECX], (uint32_t*)&env->regs[R_EAX], (uint32_t*)&env->regs[R_EDX]);
     }
     //// --- End LibAFL code ---
 }
