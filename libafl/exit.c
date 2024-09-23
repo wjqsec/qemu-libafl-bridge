@@ -115,7 +115,7 @@ void libafl_exit_request_sync_backdoor(CPUState* cpu, target_ulong pc)
 {
     last_exit_reason.kind = SYNC_EXIT;
     X86CPU *x86_cpu = X86_CPU(cpu);
-    printf("sync exit rax :%llx\n",x86_cpu->env.regs[0]);
+    printf("sync exit rax :%lx\n",x86_cpu->env.regs[0]);
     prepare_qemu_exit(cpu, pc);
 }
 
