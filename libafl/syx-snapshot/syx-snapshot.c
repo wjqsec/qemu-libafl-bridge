@@ -639,24 +639,22 @@ void syx_snapshot_root_restore(SyxSnapshot *snapshot) {
     }
 
     // In case, we first restore devices if there is a modification of memory layout
-    printf("11111111\n");
     device_restore_all(snapshot->root_snapshot->dss);
-    printf("222222222\n");
+
     g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_rb, snapshot);
-    printf("33333333\n");
+
     syx_cow_cache_flush_highest_layer(snapshot->bdrvs_cow_cache);
-    printf("44444444\n");
+
     if (mr_to_enable) {
         memory_region_set_enabled(mr_to_enable, true);
         mr_to_enable = NULL;
     }
-    printf("5555555\n");
+
     syx_snapshot_dirty_list_flush(snapshot);
-    printf("6666666\n");
+
     if (must_unlock_bql) {
         bql_unlock();
     }
-    printf("77777777777\n");
 }
 bool syx_snapshot_cow_cache_read_entry(BlockBackend *blk, int64_t offset, int64_t bytes, QEMUIOVector *qiov, size_t qiov_offset,
                                        BdrvRequestFlags flags)
