@@ -497,14 +497,16 @@ bdrv_all_get_snapshot_devices(bool has_devices, strList *devices,
                 error_setg(errp, "No block device node '%s'", devices->value);
                 return -1;
             }
-            bdrvs = g_list_append(bdrvs, bs);
+            if (bdrv_can_snapshot(bs))
+                bdrvs = g_list_append(bdrvs, bs);
             devices = devices->next;
         }
     } else {
         BlockDriverState *bs;
         BdrvNextIterator it;
         for (bs = bdrv_first(&it); bs; bs = bdrv_next(&it)) {
-            bdrvs = g_list_append(bdrvs, bs);
+            if (bdrv_can_snapshot(bs))
+                bdrvs = g_list_append(bdrvs, bs);
         }
     }
 
