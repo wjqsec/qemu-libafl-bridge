@@ -2024,15 +2024,15 @@ static void qemu_create_late_backends(void)
         exit(1);
     }
 
-    qemu_opts_foreach(qemu_find_opts("mon"),
-                      mon_init_func, NULL, &error_fatal);
+    // qemu_opts_foreach(qemu_find_opts("mon"),
+    //                   mon_init_func, NULL, &error_fatal);
 
-    if (foreach_device_config(DEV_SERIAL, serial_parse) < 0)
-        exit(1);
-    if (foreach_device_config(DEV_PARALLEL, parallel_parse) < 0)
-        exit(1);
-    if (foreach_device_config(DEV_DEBUGCON, debugcon_parse) < 0)
-        exit(1);
+    // if (foreach_device_config(DEV_SERIAL, serial_parse) < 0)
+    //     exit(1);
+    // if (foreach_device_config(DEV_PARALLEL, parallel_parse) < 0)
+    //     exit(1);
+    // if (foreach_device_config(DEV_DEBUGCON, debugcon_parse) < 0)
+    //     exit(1);
 
     /* now chardevs have been created we may have semihosting to connect */
     // qemu_semihosting_chardev_init();
