@@ -2002,7 +2002,6 @@ static bool object_create_late(const char *type)
     return !object_create_early(type) && !object_create_pre_sandbox(type);
 }
 
-__attribute__((unused))
 static void qemu_create_late_backends(void)
 {
     if (qtest_chrdev) {
@@ -3710,7 +3709,7 @@ void qemu_init(int argc, char **argv)
      * check against compatibilities on the backend memories (e.g. postcopy
      * over memory-backend-file objects).
      */
-    // qemu_create_late_backends();
+    qemu_create_late_backends();
     phase_advance(PHASE_LATE_BACKENDS_CREATED);
 
     /*
