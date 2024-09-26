@@ -3709,7 +3709,7 @@ void qemu_init(int argc, char **argv)
      * check against compatibilities on the backend memories (e.g. postcopy
      * over memory-backend-file objects).
      */
-    qemu_create_late_backends();
+    // qemu_create_late_backends();
     phase_advance(PHASE_LATE_BACKENDS_CREATED);
 
     /*
@@ -3741,5 +3741,5 @@ void qemu_init(int argc, char **argv)
     qemu_init_displays();
     accel_setup_post(current_machine);
     os_setup_post();
-    resume_mux_open();
+    // resume_mux_open();
 }
