@@ -2002,6 +2002,7 @@ static bool object_create_late(const char *type)
     return !object_create_early(type) && !object_create_pre_sandbox(type);
 }
 
+__attribute__((unused))
 static void qemu_create_late_backends(void)
 {
     if (qtest_chrdev) {
