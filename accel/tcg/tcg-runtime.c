@@ -38,6 +38,7 @@
 //// --- Begin LibAFL code ---
 
 #include "libafl/exit.h"
+#include "libafl/hook.h"
 
 #ifndef CONFIG_USER_ONLY
 
