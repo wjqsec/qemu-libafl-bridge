@@ -149,7 +149,6 @@ uint64_t HELPER(libafl_qemu_pre_memrw)(uint64_t addr, uint64_t size)
     uint64_t out_addr = addr;
     if(libafl_pre_memrw_hooks)
     {
-        
         libafl_pre_memrw_hooks->callback(libafl_pre_memrw_hooks->data, addr, size, &out_addr);
     }
     return out_addr;
