@@ -307,6 +307,9 @@ void tcg_gen_st_vec(TCGv_vec r, TCGv_ptr b, TCGArg o)
     TCGTemp *rt = arg_temp(ri);
     TCGType type = rt->base_type;
     MemOpIdx oi = make_memop_idx((type - TCG_TYPE_V64) + MO_64, 0);
+    TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))));
+    b = temp_tcgv_ptr(tcgv_i64_temp(temp_out));
 //// --- End LibAFL code ---
 
     vec_gen_ldst(INDEX_op_st_vec, r, b, o);
@@ -324,6 +327,9 @@ void tcg_gen_stl_vec(TCGv_vec r, TCGv_ptr b, TCGArg o, TCGType low_type)
     TCGType type = rt->base_type;
 //// --- Begin LibAFL code ---
     MemOpIdx oi = make_memop_idx((type - TCG_TYPE_V64) + MO_64, 0);
+    TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))));
+    b = temp_tcgv_ptr(tcgv_i64_temp(temp_out));
 //// --- End LibAFL code ---
 
     tcg_debug_assert(low_type >= TCG_TYPE_V64);
