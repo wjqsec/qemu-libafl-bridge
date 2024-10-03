@@ -288,7 +288,7 @@ void tcg_gen_ld_vec(TCGv_vec r, TCGv_ptr b, TCGArg o)
     TCGTemp *rt = arg_temp(ri);
     TCGType type = rt->base_type;
     MemOpIdx oi = make_memop_idx((type - TCG_TYPE_V64) + MO_64, 0);
-    gen_helper_libafl_qemu_pre_memrw(b,tcgv_i64_temp(b),tcg_constant_i64(memop_size(get_memop(oi))));
+    // gen_helper_libafl_qemu_pre_memrw(b,tcgv_i64_temp(b),tcg_constant_i64(memop_size(get_memop(oi))));
 //// --- End LibAFL code ---
 
     vec_gen_ldst(INDEX_op_ld_vec, r, b, o);
