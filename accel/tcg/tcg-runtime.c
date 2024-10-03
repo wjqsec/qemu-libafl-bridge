@@ -150,12 +150,13 @@ struct libafl_pre_memrw_hook {
     uint64_t data;
 };
 extern struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
+extern target_ulong libafl_gen_cur_pc;
 uint64_t HELPER(libafl_qemu_pre_memrw)(uint64_t addr, uint64_t size)
 {
     uint64_t out_addr = addr;
     if(libafl_pre_memrw_hooks)
     {
-        libafl_pre_memrw_hooks->callback(libafl_pre_memrw_hooks->data, addr, size, &out_addr);
+        libafl_pre_memrw_hooks->callback(libafl_pre_memrw_hooks->data,libafl_gen_cur_pc, addr, size, &out_addr);
     }
     return out_addr;
 }
