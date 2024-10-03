@@ -32,6 +32,7 @@
 #include "tcg-internal.h"
 
 //// --- Begin LibAFL code ---
+#include "exec/helper-gen-common.h"
 /* Copied over from the plugin_maybe_preserve_addr function
  * The variable needs to be free'd after use
  *
