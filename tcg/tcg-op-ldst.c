@@ -1306,8 +1306,7 @@ void tcg_gen_atomic_##NAME##_i32_chk(TCGv_i32 ret, TCGTemp *addr,       \
 {                                                                       \
     tcg_debug_assert(addr_type == tcg_ctx->addr_type);                  \
     tcg_debug_assert((memop & MO_SIZE) <= MO_32);                       \
-    if (tcg_ctx->gen_tb->cflags & CF_PARALLEL) {
-                                \
+    if (tcg_ctx->gen_tb->cflags & CF_PARALLEL) {                        \
 /*** --- Begin LibAFL code --- ***/                                     \
         libafl_gen_read(addr, make_memop_idx(memop, 0));                \
 /*** --- End LibAFL code --- ***/                                       \
