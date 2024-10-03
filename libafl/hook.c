@@ -862,7 +862,7 @@ int libafl_qemu_remove_pre_wrmsr_hook(size_t num, int invalidate)
 
 struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
 
-size_t libafl_add_pre_memrw_hook(void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, target_ulong size, target_ulong *out_addr),
+size_t libafl_add_pre_memrw_hook(void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr),
                                         uint64_t data)
 {
     struct libafl_pre_memrw_hook *hook = calloc(sizeof(struct libafl_pre_memrw_hook),1);
