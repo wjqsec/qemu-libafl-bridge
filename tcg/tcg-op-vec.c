@@ -25,7 +25,7 @@
 #include "tcg-internal.h"
 
 //// --- Begin LibAFL code ---
-
+#include "tcg/tcg-runtime.h"
 void libafl_gen_read(TCGTemp *addr, MemOpIdx oi);
 void libafl_gen_write(TCGTemp *addr, MemOpIdx oi);
 
