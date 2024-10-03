@@ -32,7 +32,11 @@
 #include "tcg-internal.h"
 
 //// --- Begin LibAFL code ---
-
+#include "exec/exec-all.h"
+#include "exec/translator.h"
+#include "exec/plugin-gen.h"
+#include "tcg/tcg-op-common.h"
+#include "internal-target.h"
 /* Copied over from the plugin_maybe_preserve_addr function
  * The variable needs to be free'd after use
  *
