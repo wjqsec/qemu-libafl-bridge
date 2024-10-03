@@ -146,7 +146,7 @@ void HELPER(libafl_qemu_handle_sync_backdoor)(CPUArchState *env, uint64_t pc)
 
 
 struct libafl_pre_memrw_hook {
-    void (*callback)(uint64_t data, uint64_t addr, uint64_t size, uint64_t *out_addr);
+    void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr);
     uint64_t data;
 };
 extern struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
