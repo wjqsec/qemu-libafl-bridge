@@ -17,12 +17,14 @@ void libafl_breakpoint_invalidate(CPUState *cpu, target_ulong pc);
 
 int libafl_qemu_set_breakpoint(target_ulong pc);
 int libafl_qemu_remove_breakpoint(target_ulong pc);
-void libafl_qemu_trigger_breakpoint(CPUState* cpu);
 
 enum libafl_exit_reason_kind {
     INTERNAL = 0,
     BREAKPOINT = 1,
     SYNC_EXIT = 2,
+    TIMEOUT = 3,
+    STREAM_NOTFOUND = 4,
+    STREAM_OUTOF = 5,
 };
 
 // A breakpoint has been triggered.
@@ -62,4 +64,8 @@ void libafl_exit_request_internal(CPUState* cpu, uint64_t pc, ShutdownCause caus
 void libafl_exit_request_sync_backdoor(CPUState* cpu, target_ulong pc);
 void libafl_exit_request_breakpoint(CPUState* cpu, target_ulong pc);
 struct libafl_exit_reason* libafl_get_exit_reason(void);
+
+void libafl_qemu_exit_timeout(CPUState* cpu);
+void libafl_qemu_exit_stream_notfound(CPUState* cpu);
+void libafl_qemu_exit_stream_outof(CPUState* cpu);
 

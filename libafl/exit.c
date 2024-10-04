@@ -125,12 +125,6 @@ void libafl_exit_request_breakpoint(CPUState* cpu, target_ulong pc)
     prepare_qemu_exit(cpu, pc);
 }
 
-void libafl_qemu_trigger_breakpoint(CPUState* cpu)
-{
-    CPUClass* cc = CPU_GET_CLASS(cpu);
-    libafl_exit_request_breakpoint(cpu, cc->get_pc(cpu));
-}
-
 void libafl_exit_signal_vm_start(void)
 {
     last_exit_reason.cpu = NULL;
@@ -142,6 +136,21 @@ struct libafl_exit_reason* libafl_get_exit_reason(void)
     if (expected_exit) {
         return &last_exit_reason;
     }
-
     return NULL;
+}
+
+void libafl_qemu_exit_timeout(CPUState* cpu)
+{
+    last_exit_reason.kind = TIMEOUT;
+    prepare_qemu_exit(cpu, pc);
+}
+void libafl_qemu_exit_stream_notfound(CPUState* cpu)
+{
+    last_exit_reason.kind = STREAM_NOTFOUND;
+    prepare_qemu_exit(cpu, pc);
+}
+void libafl_qemu_exit_stream_outof(CPUState* cpu)
+{
+    last_exit_reason.kind = STREAM_OUTOF;
+    prepare_qemu_exit(cpu, pc);
 }
