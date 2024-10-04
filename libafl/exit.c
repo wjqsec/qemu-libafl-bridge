@@ -142,15 +142,18 @@ struct libafl_exit_reason* libafl_get_exit_reason(void)
 void libafl_qemu_exit_timeout(CPUState* cpu)
 {
     last_exit_reason.kind = TIMEOUT;
-    prepare_qemu_exit(cpu, pc);
+    CPUClass* cc = CPU_GET_CLASS(cpu);
+    prepare_qemu_exit(cpu, cc->get_pc(cpu));
 }
 void libafl_qemu_exit_stream_notfound(CPUState* cpu)
 {
     last_exit_reason.kind = STREAM_NOTFOUND;
-    prepare_qemu_exit(cpu, pc);
+    CPUClass* cc = CPU_GET_CLASS(cpu);
+    prepare_qemu_exit(cpu, cc->get_pc(cpu));
 }
 void libafl_qemu_exit_stream_outof(CPUState* cpu)
 {
     last_exit_reason.kind = STREAM_OUTOF;
-    prepare_qemu_exit(cpu, pc);
+    CPUClass* cc = CPU_GET_CLASS(cpu);
+    prepare_qemu_exit(cpu, cc->get_pc(cpu));
 }
