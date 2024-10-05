@@ -10,7 +10,7 @@
 #define LIBAFL_TABLES_SIZE 16384
 #define LIBAFL_TABLES_HASH(p) (((13*((size_t)(p))) ^ (((size_t)(p)) >> 15)) % LIBAFL_TABLES_SIZE)
 #define LIBAFL_MAX_INSNS 16
-
+extern bool io_handled;
 void tcg_gen_callN(TCGHelperInfo *info, TCGTemp *ret, TCGTemp **args);
 
 TranslationBlock *libafl_gen_edge(CPUState *cpu, target_ulong src_block,

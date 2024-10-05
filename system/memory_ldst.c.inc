@@ -22,7 +22,6 @@
 
 #include "libafl/hook.h"
 
-extern bool io_handled;
 //// --- End LibAFL code ---
 /* warning: addr must be aligned */
 static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
