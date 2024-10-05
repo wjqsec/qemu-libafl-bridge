@@ -43,16 +43,25 @@ struct MemoryRegionPortioList {
 #define TYPE_MEMORY_REGION_PORTIO_LIST "memory-region-portio-list"
 OBJECT_DECLARE_SIMPLE_TYPE(MemoryRegionPortioList, MEMORY_REGION_PORTIO_LIST)
 
+//// --- Begin LibAFL code ---
+bool io_handled = true;
+//// --- End LibAFL code ---
 static uint64_t unassigned_io_read(void *opaque, hwaddr addr, unsigned size)
 {
+    //// --- Begin LibAFL code ---
+    io_handled = false;
+    //// --- End LibAFL code ---
+
     return -1ULL;
 }
 
 static void unassigned_io_write(void *opaque, hwaddr addr, uint64_t val,
                                 unsigned size)
 {
+    //// --- Begin LibAFL code ---
+    io_handled = false;
+    //// --- End LibAFL code ---
 }
-
 const MemoryRegionOps unassigned_io_ops = {
     .read = unassigned_io_read,
     .write = unassigned_io_write,
