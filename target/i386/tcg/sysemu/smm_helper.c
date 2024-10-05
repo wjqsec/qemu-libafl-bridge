@@ -23,7 +23,9 @@
 #include "exec/log.h"
 #include "tcg/helper-tcg.h"
 
-
+//// --- Begin LibAFL code ---
+#include "libafl/hook.h" 
+//// --- End LibAFL code ---
 /* SMM support */
 
 #ifdef TARGET_X86_64
@@ -34,6 +36,9 @@
 
 void do_smm_enter(X86CPU *cpu)
 {
+    //// --- Begin LibAFL code ---
+    x86_in_smm_mode = true;
+    //// --- End LibAFL code ---
     CPUX86State *env = &cpu->env;
     CPUState *cs = CPU(cpu);
     target_ulong sm_state;
@@ -193,6 +198,9 @@ void do_smm_enter(X86CPU *cpu)
 
 void helper_rsm(CPUX86State *env)
 {
+    //// --- Begin LibAFL code ---
+    x86_in_smm_mode = false;
+    //// --- End LibAFL code ---
     X86CPU *cpu = env_archcpu(env);
     CPUState *cs = env_cpu(env);
     target_ulong sm_state;

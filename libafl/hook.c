@@ -883,3 +883,8 @@ int libafl_qemu_remove_pre_memrw_hook(size_t num, int invalidate)
     }
     return 0;
 }
+bool x86_in_smm_mode = false;
+bool libafl_qemu_in_smm_mode(void)
+{
+    return x86_in_smm_mode;
+}

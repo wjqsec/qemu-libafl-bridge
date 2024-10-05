@@ -5,7 +5,6 @@ uintptr_t libafl_qemu_host_page_size(void)
 {
     return qemu_real_host_page_size();
 }
-
 #ifndef CONFIG_USER_ONLY
 uint8_t* libafl_paddr2host(CPUState* cpu, hwaddr addr, bool is_write)
 {
