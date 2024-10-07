@@ -49,7 +49,7 @@ bool io_handled = true;
 static uint64_t unassigned_io_read(void *opaque, hwaddr addr, unsigned size)
 {
     //// --- Begin LibAFL code ---
-    // io_handled = false;
+    io_handled = false;
     //// --- End LibAFL code ---
 
     return -1ULL;
