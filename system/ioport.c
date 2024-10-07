@@ -59,7 +59,7 @@ static void unassigned_io_write(void *opaque, hwaddr addr, uint64_t val,
                                 unsigned size)
 {
     //// --- Begin LibAFL code ---
-    io_handled = false;
+    // io_handled = false;
     //// --- End LibAFL code ---
 }
 const MemoryRegionOps unassigned_io_ops = {
