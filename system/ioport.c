@@ -50,7 +50,7 @@ static uint64_t unassigned_io_read(void *opaque, hwaddr addr, unsigned size)
 {
     //// --- Begin LibAFL code ---
     io_handled = false;
-    printf("pci :%x not handled???\n",addr);
+    printf("pci :%lx not handled???\n",addr);
     //// --- End LibAFL code ---
 
     return -1ULL;
