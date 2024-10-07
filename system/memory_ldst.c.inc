@@ -47,7 +47,7 @@ static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
         //// --- Begin LibAFL code ---
         if (libafl_post_devicereg_read_hooks)
         {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
+            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : MEMTX_OK;
             libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val, temp_r);
         }
         io_handled = true;
@@ -125,7 +125,7 @@ static inline uint64_t glue(address_space_ldq_internal, SUFFIX)(ARG1_DECL,
         //// --- Begin LibAFL code ---
         if (libafl_post_devicereg_read_hooks)
         {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
+            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : MEMTX_OK;
             libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val, temp_r);
         }
         io_handled = true;
@@ -199,7 +199,7 @@ uint8_t glue(address_space_ldub, SUFFIX)(ARG1_DECL,
         //// --- Begin LibAFL code ---
         if (libafl_post_devicereg_read_hooks)
         {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
+            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : MEMTX_OK;
             libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val, temp_r);
         }
         io_handled = true;
@@ -245,7 +245,7 @@ static inline uint16_t glue(address_space_lduw_internal, SUFFIX)(ARG1_DECL,
         //// --- Begin LibAFL code ---
         if (libafl_post_devicereg_read_hooks)
         {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
+            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : MEMTX_OK;
             libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val, temp_r);
         }
         io_handled = true;
