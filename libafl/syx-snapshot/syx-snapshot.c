@@ -129,6 +129,7 @@ void syx_snapshot_init(bool cached_bdrvs) {
     syx_snapshot_state.tracked_snapshots = syx_snapshot_tracker_init();
 
     if (cached_bdrvs) {
+        printf("nnnnnnnnnnnnnnnnnnnn\n");
         syx_snapshot_state.before_fuzz_cache = syx_cow_cache_new();
         syx_cow_cache_push_layer(syx_snapshot_state.before_fuzz_cache, SYX_SNAPSHOT_COW_CACHE_DEFAULT_CHUNK_SIZE, SYX_SNAPSHOT_COW_CACHE_DEFAULT_MAX_BLOCKS);
     }
@@ -138,7 +139,7 @@ void syx_snapshot_init(bool cached_bdrvs) {
 
 SyxSnapshot *syx_snapshot_new(bool track, bool is_active_bdrv_cache, DeviceSnapshotKind kind, char **devices) {
     SyxSnapshot *snapshot = g_new0(SyxSnapshot, 1);
-    printf("11111111111\n");
+    printf("11111111111 %p\n", syx_snapshot_state.before_fuzz_cache);
     snapshot->root_snapshot = syx_snapshot_root_new(kind, devices);
     printf("222222222\n");
     snapshot->last_incremental_snapshot = NULL;
