@@ -129,7 +129,6 @@ void syx_snapshot_init(bool cached_bdrvs) {
     syx_snapshot_state.tracked_snapshots = syx_snapshot_tracker_init();
 
     if (cached_bdrvs) {
-        printf("nnnnnnnnnnnnnnnnnnnn\n");
         syx_snapshot_state.before_fuzz_cache = syx_cow_cache_new();
         syx_cow_cache_push_layer(syx_snapshot_state.before_fuzz_cache, SYX_SNAPSHOT_COW_CACHE_DEFAULT_CHUNK_SIZE, SYX_SNAPSHOT_COW_CACHE_DEFAULT_MAX_BLOCKS);
     }
@@ -139,32 +138,22 @@ void syx_snapshot_init(bool cached_bdrvs) {
 
 SyxSnapshot *syx_snapshot_new(bool track, bool is_active_bdrv_cache, DeviceSnapshotKind kind, char **devices) {
     SyxSnapshot *snapshot = g_new0(SyxSnapshot, 1);
-    printf("11111111111 %p\n", syx_snapshot_state.before_fuzz_cache);
+
     snapshot->root_snapshot = syx_snapshot_root_new(kind, devices);
-    printf("222222222\n");
     snapshot->last_incremental_snapshot = NULL;
-    printf("3333333333\n");
     snapshot->rbs_dirty_list = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL,
                                                      (GDestroyNotify) g_hash_table_remove_all);
-    printf("44444444444\n");
     snapshot->bdrvs_cow_cache = syx_cow_cache_new();
-    printf("555555555555\n");
+
     if (is_active_bdrv_cache) {
-        printf("66666666666 %p\n",syx_snapshot_state.before_fuzz_cache);
         syx_cow_cache_move(snapshot->bdrvs_cow_cache, &syx_snapshot_state.before_fuzz_cache);
-        printf("7777777777777 %p\n",syx_snapshot_state.before_fuzz_cache);
         syx_snapshot_state.active_bdrv_cache_snapshot = snapshot;
-        printf("8888888888\n");
     } else {
-        printf("99999999999\n");
         syx_cow_cache_push_layer(snapshot->bdrvs_cow_cache, SYX_SNAPSHOT_COW_CACHE_DEFAULT_CHUNK_SIZE, SYX_SNAPSHOT_COW_CACHE_DEFAULT_MAX_BLOCKS);
-        printf("qqqqqqqqqqqq\n");
     }
 
     if (track) {
-        printf("wwwwwwwwwwwww\n");
         syx_snapshot_track(&syx_snapshot_state.tracked_snapshots, snapshot);
-        printf("eeeeeeeeeeeee\n");
     }
 
 #ifdef CONFIG_DEBUG_TCG
@@ -172,9 +161,9 @@ SyxSnapshot *syx_snapshot_new(bool track, bool is_active_bdrv_cache, DeviceSnaps
     g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_check_memory_rb, snapshot);
     SYX_PRINTF("[Snapshot Creation] Memory is consistent.\n");
 #endif
-    printf("rrrrrrrrrrrrrrr\n");
+
     syx_snapshot_state.is_enabled = true;
-    printf("ttttttttttt\n");
+
     return snapshot;
 }
 
