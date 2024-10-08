@@ -149,7 +149,7 @@ SyxSnapshot *syx_snapshot_new(bool track, bool is_active_bdrv_cache, DeviceSnaps
     snapshot->bdrvs_cow_cache = syx_cow_cache_new();
     printf("555555555555\n");
     if (is_active_bdrv_cache) {
-        printf("66666666666\n");
+        printf("66666666666 %p\n",syx_snapshot_state.before_fuzz_cache);
         syx_cow_cache_move(snapshot->bdrvs_cow_cache, &syx_snapshot_state.before_fuzz_cache);
         printf("7777777777777\n");
         syx_snapshot_state.active_bdrv_cache_snapshot = snapshot;
