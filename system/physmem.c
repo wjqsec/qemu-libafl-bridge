@@ -2018,6 +2018,7 @@ RAMBlock *qemu_ram_alloc_internal(ram_addr_t size, ram_addr_t max_size,
                                   void *host, uint32_t ram_flags,
                                   MemoryRegion *mr, Error **errp)
 {
+    printf("qemu_ram_alloc_internal %s\n",mr->name);
     RAMBlock *new_block;
     Error *local_err = NULL;
     int align;
