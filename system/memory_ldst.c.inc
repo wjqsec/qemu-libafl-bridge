@@ -314,7 +314,7 @@ void glue(address_space_stl_notdirty, SUFFIX)(ARG1_DECL,
 
     RCU_READ_LOCK();
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
-    if(strstr(mr->name, "smram"))
+
         printf("access %s\n",mr->name);
     if (l < 4 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
@@ -361,7 +361,7 @@ static inline void glue(address_space_stl_internal, SUFFIX)(ARG1_DECL,
 
     RCU_READ_LOCK();
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
-    if(strstr(mr->name, "smram"))
+
         printf("access %s\n",mr->name);
     if (l < 4 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
@@ -435,7 +435,7 @@ void glue(address_space_stb, SUFFIX)(ARG1_DECL,
 
     RCU_READ_LOCK();
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
-    if(strstr(mr->name, "smram"))
+
         printf("access %s\n",mr->name);
     if (!memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
@@ -479,7 +479,7 @@ static inline void glue(address_space_stw_internal, SUFFIX)(ARG1_DECL,
 
     RCU_READ_LOCK();
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
-    if(strstr(mr->name, "smram"))
+
         printf("access %s\n",mr->name);
     if (l < 2 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
@@ -554,7 +554,7 @@ static void glue(address_space_stq_internal, SUFFIX)(ARG1_DECL,
 
     RCU_READ_LOCK();
     mr = TRANSLATE(addr, &addr1, &l, true, attrs);
-    if(strstr(mr->name, "smram"))
+
         printf("access %s\n",mr->name);
     if (l < 8 || !memory_access_is_direct(mr, true)) {
         release_lock |= prepare_mmio_access(mr);
