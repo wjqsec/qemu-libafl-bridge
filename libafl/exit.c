@@ -138,6 +138,11 @@ struct libafl_exit_reason* libafl_get_exit_reason(void)
     }
     return NULL;
 }
+void libafl_qemu_trigger_breakpoint(CPUState* cpu)
+{
+    CPUClass* cc = CPU_GET_CLASS(cpu);
+    libafl_exit_request_breakpoint(cpu, cc->get_pc(cpu));
+}
 
 void libafl_qemu_exit_timeout(CPUState* cpu)
 {

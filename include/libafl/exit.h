@@ -65,6 +65,7 @@ void libafl_exit_request_sync_backdoor(CPUState* cpu, target_ulong pc);
 void libafl_exit_request_breakpoint(CPUState* cpu, target_ulong pc);
 struct libafl_exit_reason* libafl_get_exit_reason(void);
 
+void libafl_qemu_trigger_breakpoint(CPUState* cpu);
 void libafl_qemu_exit_timeout(CPUState* cpu);
 void libafl_qemu_exit_stream_notfound(CPUState* cpu);
 void libafl_qemu_exit_stream_outof(CPUState* cpu);
