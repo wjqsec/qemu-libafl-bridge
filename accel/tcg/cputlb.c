@@ -43,7 +43,7 @@
 #endif
 #include "tcg/tcg-ldst.h"
 #include "tcg/oversized-guest.h"
-
+#include "libafl/hook.h"
 /* DEBUG defines, enable DEBUG_TLB_LOG to log to the CPU_LOG_MMU target */
 /* #define DEBUG_TLB */
 /* #define DEBUG_TLB_LOG */
@@ -1469,7 +1469,7 @@ static int probe_access_internal(CPUState *cpu, vaddr addr,
     /* Everything else is RAM. */
     *phost = (void *)((uintptr_t)addr + entry->addend);
 //// --- Begin LibAFL code ---
-    printf("tlb access %lx\n",addr);
+    printf("tlb access %lx %d\n",addr,libafl_qemu_in_smm_mode());
     if (access_type == MMU_DATA_STORE) {
         syx_snapshot_dirty_list_add_hostaddr(*phost);
     }
@@ -1824,7 +1824,7 @@ static bool mmu_lookup(CPUState *cpu, vaddr addr, MemOpIdx oi,
 
         // TODO: Does not work?
         // if (type == MMU_DATA_STORE) {
-        printf("tlb access %lx\n",addr);
+        printf("tlb access %lx %d\n",addr,libafl_qemu_in_smm_mode());
             syx_snapshot_dirty_list_add_hostaddr(l->page[0].haddr);
         // }
 
@@ -1855,7 +1855,7 @@ static bool mmu_lookup(CPUState *cpu, vaddr addr, MemOpIdx oi,
         //// --- Begin LibAFL code ---
 
         // if (type == MMU_DATA_STORE) {
-        printf("tlb access %lx\n",addr);
+        printf("tlb access %lx %d\n",addr,libafl_qemu_in_smm_mode());
             syx_snapshot_dirty_list_add_hostaddr(l->page[0].haddr);
             syx_snapshot_dirty_list_add_hostaddr(l->page[1].haddr);
         // }
@@ -1981,7 +1981,7 @@ static void *atomic_mmu_lookup(CPUState *cpu, vaddr addr, MemOpIdx oi,
     full = &cpu->neg.tlb.d[mmu_idx].fulltlb[index];
 
     //// --- Begin LibAFL code ---
-    printf("tlb access %lx\n",addr);
+    printf("tlb access %lx %d\n",addr,libafl_qemu_in_smm_mode());
     syx_snapshot_dirty_list_add_hostaddr(hostaddr);
 
     //// --- End LibAFL code ---
