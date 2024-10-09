@@ -1563,6 +1563,7 @@ bool memory_region_init_ram_flags_nomigrate(MemoryRegion *mr,
                                             uint32_t ram_flags,
                                             Error **errp)
 {
+    printf("add ram %s\n",name);
     Error *err = NULL;
     memory_region_init(mr, owner, name, size);
     mr->ram = true;
@@ -1588,6 +1589,7 @@ bool memory_region_init_resizeable_ram(MemoryRegion *mr,
                                                        void *host),
                                        Error **errp)
 {
+    printf("add ram %s\n",name);
     Error *err = NULL;
     memory_region_init(mr, owner, name, size);
     mr->ram = true;
@@ -1615,6 +1617,7 @@ bool memory_region_init_ram_from_file(MemoryRegion *mr,
                                       ram_addr_t offset,
                                       Error **errp)
 {
+    printf("add ram %s\n",name);
     Error *err = NULL;
     memory_region_init(mr, owner, name, size);
     mr->ram = true;
@@ -1642,6 +1645,7 @@ bool memory_region_init_ram_from_fd(MemoryRegion *mr,
                                     ram_addr_t offset,
                                     Error **errp)
 {
+    printf("add ram %s\n",name);
     Error *err = NULL;
     memory_region_init(mr, owner, name, size);
     mr->ram = true;
@@ -1666,6 +1670,7 @@ void memory_region_init_ram_ptr(MemoryRegion *mr,
                                 uint64_t size,
                                 void *ptr)
 {
+    printf("add ram %s\n",name);
     memory_region_init(mr, owner, name, size);
     mr->ram = true;
     mr->terminates = true;
@@ -1682,6 +1687,7 @@ void memory_region_init_ram_device_ptr(MemoryRegion *mr,
                                        uint64_t size,
                                        void *ptr)
 {
+    printf("add ram %s\n",name);
     memory_region_init(mr, owner, name, size);
     mr->ram = true;
     mr->terminates = true;
@@ -1730,6 +1736,7 @@ bool memory_region_init_rom_device_nomigrate(MemoryRegion *mr,
                                              uint64_t size,
                                              Error **errp)
 {
+    printf("add ram %s\n",name);
     Error *err = NULL;
     assert(ops);
     memory_region_init(mr, owner, name, size);
