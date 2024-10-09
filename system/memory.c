@@ -2652,7 +2652,7 @@ static void memory_region_add_subregion_common(MemoryRegion *mr,
 {
     MemoryRegion *alias;
     if (mr->name && subregion->name)
-        printf("%s %s\n",mr->name, subregion->name);
+        printf("%s %d %s %d\n",mr->name,mr->ram, subregion->name,subregion->ram);
     assert(!subregion->container);
     subregion->container = mr;
     for (alias = subregion->alias; alias; alias = alias->alias) {
