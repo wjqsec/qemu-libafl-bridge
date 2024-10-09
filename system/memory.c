@@ -1221,6 +1221,7 @@ void memory_region_init(MemoryRegion *mr,
                         const char *name,
                         uint64_t size)
 {
+    printf("memory_region_init %s\n",name);
     object_initialize(mr, sizeof(*mr), TYPE_MEMORY_REGION);
     memory_region_do_init(mr, owner, name, size);
 }
