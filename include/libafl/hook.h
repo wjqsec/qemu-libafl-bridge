@@ -276,7 +276,7 @@ size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx
 int libafl_qemu_remove_pre_wrmsr_hook(size_t num, int invalidate);
 
 struct libafl_pre_memrw_hook {
-    void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr);
+    void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr, uint32_t rw);
     uint64_t data;
 };
 extern struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
