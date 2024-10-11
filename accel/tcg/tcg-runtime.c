@@ -151,7 +151,7 @@ struct libafl_pre_memrw_hook {
 };
 extern struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
 extern target_ulong libafl_gen_cur_pc;
-uint64_t HELPER(libafl_qemu_pre_memrw)(uint64_t addr, uint64_t size, uint32_t rw, uint32_t low64_val, uint64_t high64_val)
+uint64_t HELPER(libafl_qemu_pre_memrw)(uint64_t addr, uint64_t size, uint32_t rw, uint64_t low64_val, uint64_t high64_val)
 {
     uint64_t out_addr = addr;
     if(libafl_pre_memrw_hooks)
