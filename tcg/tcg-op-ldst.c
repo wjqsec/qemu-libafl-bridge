@@ -213,11 +213,8 @@ static void tcg_gen_qemu_ld_i32_int(TCGv_i32 val, TCGTemp *addr,
     orig_oi = oi = make_memop_idx(memop, idx);
     //// --- Begin LibAFL code ---
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    TCGv_i64 low64_val = tcg_temp_ebb_new_i64();
-    tcg_gen_extu_i32_i64(low64_val, val);
     gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(orig_oi))), tcg_constant_i32(0), tcg_constant_i64(0), tcg_constant_i64(0));
     addr = tcgv_i64_temp(temp_out);
-    tcg_temp_free_i64(low64_val);
     //// --- End LibAFL code ---
     if ((memop & MO_BSWAP) && !tcg_target_has_memory_bswap(memop)) {
         memop &= ~MO_BSWAP;
@@ -447,7 +444,7 @@ static void tcg_gen_qemu_st_i64_int(TCGv_i64 val, TCGTemp *addr,
     orig_oi = oi = make_memop_idx(memop, idx);
     //// --- Begin LibAFL code ---
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(orig_oi))), tcg_constant_i32(1), tcg_constant_i64(0), tcg_constant_i64(0));
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(orig_oi))), tcg_constant_i32(1), val, tcg_constant_i64(0));
     addr = tcgv_i64_temp(temp_out);
     //// --- End LibAFL code ---
     if ((memop & MO_BSWAP) && !tcg_target_has_memory_bswap(memop)) {
@@ -734,7 +731,7 @@ static void tcg_gen_qemu_st_i128_int(TCGv_i128 val, TCGTemp *addr,
     /* TODO: For now, force 32-bit hosts to use the helper. */
     //// --- Begin LibAFL code ---
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(orig_oi))), tcg_constant_i32(1), tcg_constant_i64(0), tcg_constant_i64(0));
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(orig_oi))), tcg_constant_i32(1), TCGV128_LOW(val), TCGV128_HIGH(val));
     addr = tcgv_i64_temp(temp_out);
     //// --- End LibAFL code ---
     if (TCG_TARGET_HAS_qemu_ldst_i128 && TCG_TARGET_REG_BITS == 64) {
