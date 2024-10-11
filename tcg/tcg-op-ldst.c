@@ -1322,7 +1322,7 @@ void tcg_gen_atomic_##NAME##_i32_chk(TCGv_i32 ret, TCGTemp *addr,       \
     if (tcg_ctx->gen_tb->cflags & CF_PARALLEL) {                        \
 /*** --- Begin LibAFL code --- ***/                                     \
         TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();                    \
-        gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(make_memop_idx(memop, 0)))), tcg_constant_i32(2), tcg_constant_i128(0));    \
+        gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(make_memop_idx(memop, 0)))), tcg_constant_i32(2), tcg_temp_new_i128());    \
         addr = tcgv_i64_temp(temp_out);                                 \
         libafl_gen_read(addr, make_memop_idx(memop, 0));                \
 /*** --- End LibAFL code --- ***/                                       \
@@ -1344,7 +1344,7 @@ void tcg_gen_atomic_##NAME##_i64_chk(TCGv_i64 ret, TCGTemp *addr,       \
     if (tcg_ctx->gen_tb->cflags & CF_PARALLEL) {                        \
 /*** --- Begin LibAFL code --- ***/                                     \
         TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();                    \
-        gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(make_memop_idx(memop, 0)))), tcg_constant_i32(2), tcg_constant_i128(0));    \
+        gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(make_memop_idx(memop, 0)))), tcg_constant_i32(2), tcg_temp_new_i128());    \
         addr = tcgv_i64_temp(temp_out);                                 \
         libafl_gen_read(addr, make_memop_idx(memop, 0));                \
 /*** --- End LibAFL code --- ***/                                       \

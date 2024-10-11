@@ -289,7 +289,7 @@ void tcg_gen_ld_vec(TCGv_vec r, TCGv_ptr b, TCGArg o)
     TCGType type = rt->base_type;
     MemOpIdx oi = make_memop_idx((type - TCG_TYPE_V64) + MO_64, 0);
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))), tcg_constant_i32(3), tcg_constant_i128(0));
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))), tcg_constant_i32(3), tcg_temp_new_i128());
     b = temp_tcgv_ptr(tcgv_i64_temp(temp_out));
 //// --- End LibAFL code ---
 
@@ -308,7 +308,7 @@ void tcg_gen_st_vec(TCGv_vec r, TCGv_ptr b, TCGArg o)
     TCGType type = rt->base_type;
     MemOpIdx oi = make_memop_idx((type - TCG_TYPE_V64) + MO_64, 0);
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))), tcg_constant_i32(4), tcg_constant_i128(0));
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))), tcg_constant_i32(4), tcg_temp_new_i128());
     b = temp_tcgv_ptr(tcgv_i64_temp(temp_out));
 //// --- End LibAFL code ---
 
@@ -328,7 +328,7 @@ void tcg_gen_stl_vec(TCGv_vec r, TCGv_ptr b, TCGArg o, TCGType low_type)
 //// --- Begin LibAFL code ---
     MemOpIdx oi = make_memop_idx((type - TCG_TYPE_V64) + MO_64, 0);
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))), tcg_constant_i32(4), tcg_constant_i128(0));
+    gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(tcgv_ptr_temp(b)),tcg_constant_i64(memop_size(get_memop(oi))), tcg_constant_i32(4), tcg_temp_new_i128());
     b = temp_tcgv_ptr(tcgv_i64_temp(temp_out));
 //// --- End LibAFL code ---
 
