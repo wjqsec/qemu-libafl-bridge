@@ -284,3 +284,4 @@ size_t libafl_add_pre_memrw_hook(void (*callback)(uint64_t data, target_ulong pc
                                         uint64_t data);
 int libafl_qemu_remove_pre_memrw_hook(size_t num, int invalidate);
 bool libafl_qemu_in_smm_mode(void);
+target_ulong libafl_page_offset_from_addr(target_ulong addr);
