@@ -57,7 +57,6 @@ int gdb_write_register(CPUState *cpu, uint8_t *mem_buf, int reg);
 static __thread GByteArray *libafl_qemu_mem_buf = NULL;
 
 target_ulong libafl_page_from_addr(target_ulong addr);
-target_ulong libafl_page_offset_from_addr(target_ulong addr);
 
 CPUState* libafl_qemu_get_cpu(int cpu_index);
 int libafl_qemu_num_cpus(void);
