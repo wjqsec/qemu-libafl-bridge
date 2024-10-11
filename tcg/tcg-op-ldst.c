@@ -231,7 +231,6 @@ static void tcg_gen_qemu_ld_i32_int(TCGv_i32 val, TCGTemp *addr,
     } else {
         opc = INDEX_op_qemu_ld_a64_i32;
     }
-    
 
 //// --- Begin LibAFL code ---
 
