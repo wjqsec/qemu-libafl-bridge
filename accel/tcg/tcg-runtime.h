@@ -331,6 +331,6 @@ DEF_HELPER_FLAGS_2(libafl_qemu_handle_breakpoint, TCG_CALL_NO_RWG,
 
 DEF_HELPER_FLAGS_2(libafl_qemu_handle_sync_backdoor, TCG_CALL_NO_RWG,
                     void, env, i64)
-DEF_HELPER_FLAGS_3(libafl_qemu_pre_memrw, TCG_CALL_NO_RWG,
-                    i64, i64, i64,i32)
+DEF_HELPER_FLAGS_4(libafl_qemu_pre_memrw, TCG_CALL_NO_RWG,
+                    i64, i64, i64,i32, i128)
 //// --- End LibAFL code ---
