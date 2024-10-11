@@ -93,7 +93,9 @@ target_ulong libafl_qemu_h2g(CPUState *cpu, void* x)
 target_ulong libafl_page_from_addr(target_ulong addr) {
     return addr & TARGET_PAGE_MASK;
 }
-
+target_ulong libafl_page_offset_from_addr(target_ulong addr) {
+    return addr & (~TARGET_PAGE_MASK);
+}
 CPUState* libafl_qemu_get_cpu(int cpu_index)
 {
     CPUState *cpu;
