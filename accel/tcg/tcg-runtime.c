@@ -146,17 +146,17 @@ void HELPER(libafl_qemu_handle_sync_backdoor)(CPUArchState *env, uint64_t pc)
 
 
 struct libafl_pre_memrw_hook {
-    void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr);
+    void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr, uint32_t rw);
     uint64_t data;
 };
 extern struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
 extern target_ulong libafl_gen_cur_pc;
-uint64_t HELPER(libafl_qemu_pre_memrw)(uint64_t addr, uint64_t size)
+uint64_t HELPER(libafl_qemu_pre_memrw)(uint64_t addr, uint64_t size, uint32_t rw)
 {
     uint64_t out_addr = addr;
     if(libafl_pre_memrw_hooks)
     {
-        libafl_pre_memrw_hooks->callback(libafl_pre_memrw_hooks->data,libafl_gen_cur_pc, addr, size, &out_addr);
+        libafl_pre_memrw_hooks->callback(libafl_pre_memrw_hooks->data,libafl_gen_cur_pc, addr, size, &out_addr, rw);
     }
     return out_addr;
 }

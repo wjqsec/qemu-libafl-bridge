@@ -280,7 +280,7 @@ struct libafl_pre_memrw_hook {
     uint64_t data;
 };
 extern struct libafl_pre_memrw_hook* libafl_pre_memrw_hooks;
-size_t libafl_add_pre_memrw_hook(void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr),
+size_t libafl_add_pre_memrw_hook(void (*callback)(uint64_t data, target_ulong pc, target_ulong addr, uint64_t size, target_ulong *out_addr, uint32_t rw),
                                         uint64_t data);
 int libafl_qemu_remove_pre_memrw_hook(size_t num, int invalidate);
 bool libafl_qemu_in_smm_mode(void);
