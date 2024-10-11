@@ -444,7 +444,6 @@ static void tcg_gen_qemu_st_i64_int(TCGv_i64 val, TCGTemp *addr,
     orig_oi = oi = make_memop_idx(memop, idx);
     //// --- Begin LibAFL code ---
     TCGv_i64 temp_out =  tcg_temp_ebb_new_i64();
-    TCGv_i64 low64_val = temp_tcgv_i64(tcgv_i32_temp(val));
     gen_helper_libafl_qemu_pre_memrw(temp_out,temp_tcgv_i64(addr),tcg_constant_i64(memop_size(get_memop(orig_oi))), tcg_constant_i32(1), val, tcg_constant_i64(0));
     addr = tcgv_i64_temp(temp_out);
     //// --- End LibAFL code ---
