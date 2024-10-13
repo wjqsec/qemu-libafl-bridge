@@ -757,8 +757,6 @@ size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, targe
 }
 int libafl_qemu_remove_post_devicereg_read_hook(size_t num, int invalidate)
 {
-    if ( num != 1 )
-        return 0;
     if (libafl_post_devicereg_read_hooks)
     {
         free(libafl_post_devicereg_read_hooks);
@@ -780,8 +778,6 @@ size_t libafl_add_pre_devicereg_write_hook(void (*callback)(uint64_t data, targe
 }
 int libafl_qemu_remove_pre_devicereg_write_hook(size_t num, int invalidate)
 {
-    if ( num != 1 )
-        return 0;
     if (libafl_pre_devicereg_write_hooks)
     {
         free(libafl_pre_devicereg_write_hooks);
@@ -803,8 +799,6 @@ size_t libafl_add_post_cpuid_hook(void (*callback)(uint64_t data,uint32_t in_eax
 }
 int libafl_qemu_remove_post_cpuid_hook(size_t num, int invalidate)
 {
-    if ( num != 1 )
-        return 0;
     if (libafl_post_cpuid_hooks)
     {
         free(libafl_post_cpuid_hooks);
@@ -827,8 +821,6 @@ size_t libafl_add_post_rdmsr_hook(void (*callback)(uint64_t data, uint32_t in_ec
 }
 int libafl_qemu_remove_post_rdmsr_hook(size_t num, int invalidate)
 {
-    if ( num != 1 )
-        return 0;
     if (libafl_post_rdmsr_hooks)
     {
         free(libafl_post_rdmsr_hooks);
@@ -850,8 +842,6 @@ size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx
 }
 int libafl_qemu_remove_pre_wrmsr_hook(size_t num, int invalidate)
 {
-    if ( num != 1 )
-        return 0;
     if (libafl_pre_wrmsr_hooks)
     {
         free(libafl_pre_wrmsr_hooks);
@@ -874,8 +864,6 @@ size_t libafl_add_pre_memrw_hook(void (*callback)(uint64_t data, target_ulong pc
 }
 int libafl_qemu_remove_pre_memrw_hook(size_t num, int invalidate)
 {
-    if ( num != 1 )
-        return 0;
     if (libafl_pre_memrw_hooks)
     {
         free(libafl_pre_memrw_hooks);
