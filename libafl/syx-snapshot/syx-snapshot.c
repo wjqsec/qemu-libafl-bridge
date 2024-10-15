@@ -179,8 +179,9 @@ void syx_snapshot_free(SyxSnapshot* snapshot)
     g_hash_table_remove_all(snapshot->rbs_dirty_list);
     
     syx_snapshot_root_free(snapshot->root_snapshot);
-    return;
+    
     g_free(snapshot);
+    return;
 }
 
 static void destroy_ramblock_snapshot(gpointer root_snapshot)
