@@ -175,9 +175,9 @@ void syx_snapshot_free(SyxSnapshot* snapshot)
         increment = syx_snapshot_increment_free(increment);
     }
 
-    return;
+    
     g_hash_table_remove_all(snapshot->rbs_dirty_list);
-
+    return;
     syx_snapshot_root_free(snapshot->root_snapshot);
 
     g_free(snapshot);
