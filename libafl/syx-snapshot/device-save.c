@@ -32,6 +32,12 @@ static int is_in_list(char* str, char** list) {
 }
 
 DeviceSaveState* device_save_kind(DeviceSnapshotKind kind, char** names) {
+    char **list = names;
+    while (*list) {
+        printf("-----%s\n",list);
+        list++;
+    }
+
     DeviceSaveState* dss = g_new0(DeviceSaveState, 1);
     SaveStateEntry *se;
 
