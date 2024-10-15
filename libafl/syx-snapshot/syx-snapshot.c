@@ -169,19 +169,19 @@ SyxSnapshot *syx_snapshot_new(bool track, bool is_active_bdrv_cache, DeviceSnaps
 
 void syx_snapshot_free(SyxSnapshot* snapshot)
 {
+    syx_snapshot_stop_track(&syx_snapshot_state.tracked_snapshots, snapshot);
+    
     SyxSnapshotIncrement* increment = snapshot->last_incremental_snapshot;
 
     while (increment != NULL) {
         increment = syx_snapshot_increment_free(increment);
     }
 
-    
     g_hash_table_remove_all(snapshot->rbs_dirty_list);
-    
+
     syx_snapshot_root_free(snapshot->root_snapshot);
-    
+
     g_free(snapshot);
-    return;
 }
 
 static void destroy_ramblock_snapshot(gpointer root_snapshot)
