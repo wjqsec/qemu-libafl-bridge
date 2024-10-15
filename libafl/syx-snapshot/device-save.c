@@ -45,7 +45,7 @@ DeviceSaveState* device_save_kind(DeviceSnapshotKind kind, char** names) {
     
     QTAILQ_FOREACH(se, &savevm_state.handlers, entry) {
         int ret;
-
+        printf("TRY Saving section %s...\n", se->idstr);
         if (se->is_ram) {
             continue;
         }
