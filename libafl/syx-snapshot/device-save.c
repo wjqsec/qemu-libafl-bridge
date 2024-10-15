@@ -66,7 +66,7 @@ DeviceSaveState* device_save_kind(DeviceSnapshotKind kind, char** names) {
             default:
                 break;
         }
-
+        printf("Saving section %s...\n", se->idstr);
         // SYX_PRINTF("Saving section %s...\n", se->idstr);
 
         ret = vmstate_save(f, se, NULL);
