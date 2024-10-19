@@ -327,7 +327,7 @@ qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
 {
     VMChangeStateEntry *e;
     VMChangeStateEntry *other;
-
+    printf("qemu_add_vm_change_state_handler_prio_full  %p\n",cb);
     e = g_malloc0(sizeof(*e));
     e->cb = cb;
     e->prepare_cb = prepare_cb;
