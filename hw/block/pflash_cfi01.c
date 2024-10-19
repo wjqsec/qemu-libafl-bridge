@@ -1042,10 +1042,11 @@ static void postload_update_cb(void *opaque, bool running, RunState state)
 static int pflash_post_load(void *opaque, int version_id)
 {
     PFlashCFI01 *pfl = opaque;
-    printf("QQQQQQQQQQQQQQQ %p\n",postload_update_cb);
+
     if (!pfl->ro) {
         pfl->vmstate = qemu_add_vm_change_state_handler(postload_update_cb,
                                                         pfl);
+        printf("QQQQQQQQQQQ  %p  %p\n",pfl->vmstate,postload_update_cb);
     }
     return 0;
 }
