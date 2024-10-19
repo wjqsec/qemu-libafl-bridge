@@ -117,7 +117,6 @@ static const VMStateDescription vmstate_pflash = {
     .name = "pflash_cfi01",
     .version_id = 1,
     .minimum_version_id = 1,
-    .unmigratable = 1,
     .post_load = pflash_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT8(wcycle, PFlashCFI01),

@@ -991,15 +991,17 @@ int vmstate_save(QEMUFile *f, SaveStateEntry *se, JSONWriter *vmdesc);
     int ret;
     Error *local_err = NULL;
     MigrationState *s = migrate_get_current();
-
+    printf("1111111111111  %s\n",se->idstr);
     if ((!se->ops || !se->ops->save_state) && !se->vmsd) {
+        printf("2222222222  %s\n",se->idstr);
         return 0;
     }
     if (se->vmsd && !vmstate_section_needed(se->vmsd, se->opaque)) {
         trace_savevm_section_skip(se->idstr, se->section_id);
+        printf("333333333333  %s\n",se->idstr);
         return 0;
     }
-
+    printf("44444444444  %s\n",se->idstr);
     trace_savevm_section_start(se->idstr, se->section_id);
     save_section_header(f, se, QEMU_VM_SECTION_FULL);
     if (vmdesc) {
@@ -1007,24 +1009,28 @@ int vmstate_save(QEMUFile *f, SaveStateEntry *se, JSONWriter *vmdesc);
         json_writer_str(vmdesc, "name", se->idstr);
         json_writer_int64(vmdesc, "instance_id", se->instance_id);
     }
-
+    printf("55555555555  %s\n",se->idstr);
     trace_vmstate_save(se->idstr, se->vmsd ? se->vmsd->name : "(old)");
     if (!se->vmsd) {
+        printf("666666666666  %s\n",se->idstr);
         vmstate_save_old_style(f, se, vmdesc);
     } else {
+        printf("777777777777  %s\n",se->idstr);
         ret = vmstate_save_state_with_err(f, se->vmsd, se->opaque, vmdesc, &local_err);
         if (ret) {
             migrate_set_error(s, local_err);
             error_report_err(local_err);
+            printf("88888888888  %s\n",se->idstr);
             return ret;
         }
     }
-
+    printf("999999999999  %s\n",se->idstr);
     trace_savevm_section_end(se->idstr, se->section_id, 0);
     save_section_footer(f, se);
     if (vmdesc) {
         json_writer_end_object(vmdesc);
     }
+    printf("aaaaaaaaaaaa  %s\n",se->idstr);
     return 0;
 }
 /**
