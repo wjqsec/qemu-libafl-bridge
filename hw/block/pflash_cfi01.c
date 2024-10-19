@@ -1030,13 +1030,16 @@ void pflash_cfi01_legacy_drive(PFlashCFI01 *fl, DriveInfo *dinfo)
 static void postload_update_cb(void *opaque, bool running, RunState state)
 {
     PFlashCFI01 *pfl = opaque;
-
+    printf("1111111111111111\n");
     /* This is called after bdrv_activate_all.  */
     qemu_del_vm_change_state_handler(pfl->vmstate);
+    printf("2222222222222\n");
     pfl->vmstate = NULL;
 
     trace_pflash_postload_cb(pfl->name);
+    printf("3333333333\n");
     pflash_update(pfl, 0, pfl->sector_len * pfl->nb_blocs);
+    printf("444444444444\n");
 }
 
 static int pflash_post_load(void *opaque, int version_id)
