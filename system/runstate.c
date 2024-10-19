@@ -363,26 +363,34 @@ void vm_state_notify(bool running, RunState state)
     VMChangeStateEntry *e, *next;
 
     trace_vm_state_notify(running, state, RunState_str(state));
-
+    printf("1111111111111\n");
     if (running) {
         QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
             if (e->prepare_cb) {
+                printf("222222222 %p\n",e->prepare_cb);
                 e->prepare_cb(e->opaque, running, state);
+                printf("333333333333 %p\n",e->prepare_cb);
             }
         }
 
         QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
+            printf("44444444444  %p\n",e->cb);
             e->cb(e->opaque, running, state);
+            printf("5555555555  %p\n",e->cb);
         }
     } else {
         QTAILQ_FOREACH_REVERSE_SAFE(e, &vm_change_state_head, entries, next) {
             if (e->prepare_cb) {
+                printf("6666666666  %p\n",e->prepare_cb);
                 e->prepare_cb(e->opaque, running, state);
+                printf("777777777   %p\n",e->prepare_cb);
             }
         }
 
         QTAILQ_FOREACH_REVERSE_SAFE(e, &vm_change_state_head, entries, next) {
+            printf("8888888888  %p\n",e->cb);
             e->cb(e->opaque, running, state);
+            printf("999999999  %p\n", e->cb);
         }
     }
 }
