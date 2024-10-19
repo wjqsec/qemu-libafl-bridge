@@ -1046,7 +1046,6 @@ static int pflash_post_load(void *opaque, int version_id)
     if (!pfl->ro) {
         pfl->vmstate = qemu_add_vm_change_state_handler(postload_update_cb,
                                                         pfl);
-        printf("QQQQQQQQQQQ  %p  %p\n",pfl->vmstate,pfl->vmstate->cb);
     }
     return 0;
 }
