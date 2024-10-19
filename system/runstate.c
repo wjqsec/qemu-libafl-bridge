@@ -363,7 +363,7 @@ void vm_state_notify(bool running, RunState state)
     VMChangeStateEntry *e, *next;
 
     trace_vm_state_notify(running, state, RunState_str(state));
-    printf("1111111111111\n",);
+    printf("1111111111111\n");
     if (running) {
         QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
             if (e->prepare_cb) {
