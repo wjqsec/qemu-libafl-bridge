@@ -327,7 +327,7 @@ qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
 {
     VMChangeStateEntry *e;
     VMChangeStateEntry *other;
-    
+
     e = g_malloc0(sizeof(*e));
     e->cb = cb;
     e->prepare_cb = prepare_cb;
@@ -343,7 +343,6 @@ qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
     }
 
     QTAILQ_INSERT_TAIL(&vm_change_state_head, e, entries);
-    printf("qemu_add_vm_change_state_handler_prio_full  %p  %p\n",e,e->cb); 
     return e;
 }
 
@@ -356,9 +355,7 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
 void qemu_del_vm_change_state_handler(VMChangeStateEntry *e)
 {
     QTAILQ_REMOVE(&vm_change_state_head, e, entries);
-    printf("qemu_del_vm_change_state_handler  %p  %p\n",e,e->cb);
     g_free(e);
-    printf("qemu_del_vm_change_state_handler22222  %p  %p\n",e,e->cb);
 }
 
 void vm_state_notify(bool running, RunState state)
@@ -366,34 +363,26 @@ void vm_state_notify(bool running, RunState state)
     VMChangeStateEntry *e, *next;
 
     trace_vm_state_notify(running, state, RunState_str(state));
-    printf("1111111111111\n");
+
     if (running) {
         QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
             if (e->prepare_cb) {
-                printf("222222222 %p %p\n",e->prepare_cb,e);
                 e->prepare_cb(e->opaque, running, state);
-                printf("333333333333 %p  %p\n",e->prepare_cb,e);
             }
         }
 
         QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
-            printf("44444444444  %p  %p\n",e->cb,e);
             e->cb(e->opaque, running, state);
-            printf("5555555555  %p\n",e->cb);
         }
     } else {
         QTAILQ_FOREACH_REVERSE_SAFE(e, &vm_change_state_head, entries, next) {
             if (e->prepare_cb) {
-                printf("6666666666  %p\n",e->prepare_cb);
                 e->prepare_cb(e->opaque, running, state);
-                printf("777777777   %p\n",e->prepare_cb);
             }
         }
 
         QTAILQ_FOREACH_REVERSE_SAFE(e, &vm_change_state_head, entries, next) {
-            printf("8888888888  %p\n",e->cb);
             e->cb(e->opaque, running, state);
-            printf("999999999  %p\n", e->cb);
         }
     }
 }
