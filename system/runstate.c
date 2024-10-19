@@ -356,7 +356,9 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
 void qemu_del_vm_change_state_handler(VMChangeStateEntry *e)
 {
     QTAILQ_REMOVE(&vm_change_state_head, e, entries);
+    printf("qemu_del_vm_change_state_handler  %p  %p\n",e,e->cb);
     g_free(e);
+    printf("qemu_del_vm_change_state_handler22222  %p  %p\n",e,e->cb);
 }
 
 void vm_state_notify(bool running, RunState state)
