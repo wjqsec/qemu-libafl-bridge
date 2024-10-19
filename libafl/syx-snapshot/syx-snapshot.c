@@ -194,7 +194,7 @@ static void destroy_ramblock_snapshot(gpointer root_snapshot)
 
 static SyxSnapshotRoot* syx_snapshot_root_new(DeviceSnapshotKind kind, char **devices) {
     SyxSnapshotRoot* root = g_new0(SyxSnapshotRoot, 1);
-
+    printf("111111111111111\n");
     RAMBlock *block;
     RAMBlock *inner_block;
     DeviceSaveState *dss = device_save_kind(kind, devices);
@@ -218,7 +218,7 @@ static SyxSnapshotRoot* syx_snapshot_root_new(DeviceSnapshotKind kind, char **de
 
         g_hash_table_insert(root->rbs_snapshot, GINT_TO_POINTER(block->idstr_hash), snapshot_rb);
     }
-
+    printf("222222222222222\n");
     return root;
 }
 
@@ -641,8 +641,9 @@ void syx_snapshot_root_restore(SyxSnapshot *snapshot) {
     }
 
     // In case, we first restore devices if there is a modification of memory layout
+    printf("333333333333\n");
     device_restore_all(snapshot->root_snapshot->dss);
-
+    printf("4444444444444\n");
     g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_rb, snapshot);
 
     syx_cow_cache_flush_highest_layer(snapshot->bdrvs_cow_cache);
