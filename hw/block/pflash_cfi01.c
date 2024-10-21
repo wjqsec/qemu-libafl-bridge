@@ -115,6 +115,7 @@ static const VMStateDescription vmstate_pflash_blk_write = {
 
 static const VMStateDescription vmstate_pflash = {
     .name = "pflash_cfi01",
+    .unmigratable = 1, 
     .version_id = 1,
     .minimum_version_id = 1,
     .post_load = pflash_post_load,
