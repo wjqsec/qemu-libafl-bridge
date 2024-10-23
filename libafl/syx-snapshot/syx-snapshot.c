@@ -250,18 +250,25 @@ void syx_snapshot_track(SyxSnapshotTracker *tracker, SyxSnapshot *snapshot) {
 }
 
 void syx_snapshot_stop_track(SyxSnapshotTracker *tracker, SyxSnapshot *snapshot) {
+    int64_t snap_idx = -1;
     for (uint64_t i = 0; i < tracker->length; ++i) {
         if (tracker->tracked_snapshots[i] == snapshot) {
-            for (uint64_t j = i + i; j < tracker->length; ++j) {
-                tracker->tracked_snapshots[j - 1] = tracker->tracked_snapshots[j];
-            }
-            tracker->length--;
-            return;
+            snap_idx = i;
+            break;
+            // for (uint64_t j = i + i; j < tracker->length; ++j) {
+            //     tracker->tracked_snapshots[j - 1] = tracker->tracked_snapshots[j];
+            // }
+            // tracker->length--;
+            // return;
         }
     }
-
-    SYX_PRINTF("ERROR: trying to remove an untracked snapshot\n");
-    abort();
+    if (snap_idx != -1) {
+        memmove(&tracker->tracked_snapshots[snap_idx], &tracker->tracked_snapshots[snap_idx + 1], sizeof(tracker->tracked_snapshots[0]) * (tracker->length - snap_idx - 1));
+        tracker->length--;
+    }
+        
+    // SYX_PRINTF("ERROR: trying to remove an untracked snapshot\n");
+    // abort();
 }
 
 static void
