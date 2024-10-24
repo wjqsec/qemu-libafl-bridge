@@ -655,7 +655,7 @@ void syx_snapshot_root_restore(SyxSnapshot *snapshot, bool full_root_restore) {
 
     // In case, we first restore devices if there is a modification of memory layout
     device_restore_all(snapshot->root_snapshot->dss);
-    if (!full_mem_restore)
+    if (!full_root_restore)
         g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_rb, snapshot);
     else 
         g_hash_table_foreach(snapshot->root_snapshot->rbs_snapshot, restore_full_root, NULL);
