@@ -73,7 +73,7 @@ SyxSnapshot *syx_snapshot_new(bool track, bool is_active_bdrv_cache, DeviceSnaps
 
 void syx_snapshot_free(SyxSnapshot *snapshot);
 
-void syx_snapshot_root_restore(SyxSnapshot *snapshot);
+void syx_snapshot_root_restore(SyxSnapshot *snapshot, bool full_root_restore);
 
 SyxSnapshotCheckResult syx_snapshot_check(SyxSnapshot* ref_snapshot);
 

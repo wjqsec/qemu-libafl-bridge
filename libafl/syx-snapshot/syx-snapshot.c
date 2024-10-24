@@ -632,8 +632,14 @@ SyxSnapshotCheckResult syx_snapshot_check(SyxSnapshot* ref_snapshot) {
 
     return res;
 }
-
-void syx_snapshot_root_restore(SyxSnapshot *snapshot) {
+static void restore_full_root(gpointer rb_idstr_hash, gpointer rb_block, gpointer args_ptr) {
+    RAMBlock* block;
+    SyxSnapshotRAMBlock *snap_block = rb_block;
+    block = ramblock_lookup(rb_idstr_hash);
+    if (block)
+        memcpy(block->host, snap_block->ram, snap_block->used_length);
+}
+void syx_snapshot_root_restore(SyxSnapshot *snapshot, bool full_root_restore) {
     // health check.
     CPUState *cpu;
     CPU_FOREACH(cpu) {
@@ -649,8 +655,11 @@ void syx_snapshot_root_restore(SyxSnapshot *snapshot) {
 
     // In case, we first restore devices if there is a modification of memory layout
     device_restore_all(snapshot->root_snapshot->dss);
-
-    g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_rb, snapshot);
+    if (!full_mem_restore)
+        g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_rb, snapshot);
+    else 
+        g_hash_table_foreach(snapshot->root_snapshot->rbs_snapshot, restore_full_root, NULL);
+        
 
     syx_cow_cache_flush_highest_layer(snapshot->bdrvs_cow_cache);
 
