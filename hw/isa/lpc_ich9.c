@@ -513,20 +513,15 @@ ich9_lpc_pmbase_sci_update(ICH9LPCState *lpc)
 static void ich9_lpc_rcba_update(ICH9LPCState *lpc, uint32_t rcba_old)
 {
     uint32_t rcba = pci_get_long(lpc->d.config + ICH9_LPC_RCBA);
-    printf("qqqqqqqqqqqqqqqqqqqq  %d\n",rcba_old);
+
     if (rcba_old & ICH9_LPC_RCBA_EN) {
-        printf("aaaaaaaaaaaa %p\n",lpc->rcrb_mem.container);
         memory_region_del_subregion(get_system_memory(), &lpc->rcrb_mem);
-        printf("bbbbbbbbbbbbbbb %p\n",lpc->rcrb_mem.container);
     }
-    printf("ccccccccccccccc %p\n",lpc->rcrb_mem.container);
     if (rcba & ICH9_LPC_RCBA_EN) {
-        printf("ddddddddddddddd %p\n",lpc->rcrb_mem.container);
         memory_region_add_subregion_overlap(get_system_memory(),
                                             rcba & ICH9_LPC_RCBA_BA_MASK,
                                             &lpc->rcrb_mem, 1);
     }
-    printf("wwwwwwwwwwwwwwwwwwwww\n");
 }
 
 /* config:GEN_PMCON* */
@@ -549,7 +544,7 @@ static int ich9_lpc_post_load(void *opaque, int version_id)
     ICH9LPCState *lpc = opaque;
 
     ich9_lpc_pmbase_sci_update(lpc);
-    ich9_lpc_rcba_update(lpc, 0 /* disabled ICH9_LPC_RCBA_EN */);
+    ich9_lpc_rcba_update(lpc, lpc->rcrb_mem.container == 0 ? 0 : ICH9_LPC_RCBA_EN);
     ich9_lpc_pmcon_update(lpc);
     return 0;
 }
