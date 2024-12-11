@@ -326,6 +326,7 @@ static PCIINTxRoute ich9_route_intx_pin_to_irq(void *opaque, int pirq_pin)
 
 void ich9_generate_smi(void)
 {
+    printf("ttttttttttttttttttttttttttttttttttt\n");
     cpu_interrupt(first_cpu, CPU_INTERRUPT_SMI);
 }
 
