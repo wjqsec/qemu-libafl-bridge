@@ -513,16 +513,20 @@ ich9_lpc_pmbase_sci_update(ICH9LPCState *lpc)
 static void ich9_lpc_rcba_update(ICH9LPCState *lpc, uint32_t rcba_old)
 {
     uint32_t rcba = pci_get_long(lpc->d.config + ICH9_LPC_RCBA);
-
+    printf("qqqqqqqqqqqqqqqqqqqq\n");
     if (rcba_old & ICH9_LPC_RCBA_EN) {
-        memory_region_del_subregion(get_system_memory(), &lpc->rcrb_mem);
-    }
-    if (rcba & ICH9_LPC_RCBA_EN) {
         printf("aaaaaaaaaaaa %p\n",lpc->rcrb_mem.container);
+        memory_region_del_subregion(get_system_memory(), &lpc->rcrb_mem);
+        printf("bbbbbbbbbbbbbbb %p\n",lpc->rcrb_mem.container);
+    }
+    printf("ccccccccccccccc %p\n",lpc->rcrb_mem.container);
+    if (rcba & ICH9_LPC_RCBA_EN) {
+        printf("ddddddddddddddd %p\n",lpc->rcrb_mem.container);
         memory_region_add_subregion_overlap(get_system_memory(),
                                             rcba & ICH9_LPC_RCBA_BA_MASK,
                                             &lpc->rcrb_mem, 1);
     }
+    printf("wwwwwwwwwwwwwwwwwwwww\n");
 }
 
 /* config:GEN_PMCON* */
