@@ -459,7 +459,7 @@ static void ich9_lpc_pm_init(ICH9LPCState *lpc)
 static void ich9_apm_ctrl_changed(uint32_t val, void *arg)
 {
     ICH9LPCState *lpc = arg;
-    printf("yyyyyyyyyyyyyyyyyyyy\n");
+    
     /* ACPI specs 3.0, 4.7.2.5 */
     acpi_pm1_cnt_update(&lpc->pm.acpi_regs,
                         val == ICH9_APM_ACPI_ENABLE,
@@ -467,16 +467,18 @@ static void ich9_apm_ctrl_changed(uint32_t val, void *arg)
     if (val == ICH9_APM_ACPI_ENABLE || val == ICH9_APM_ACPI_DISABLE) {
         return;
     }
-
+    printf("yyyyyyyyyyyyyyyyyyyy00000\n");
     /* SMI_EN = PMBASE + 30. SMI control and enable register */
     if (lpc->pm.smi_en & ICH9_PMIO_SMI_EN_APMC_EN) {
         if (lpc->smi_negotiated_features &
             (UINT64_C(1) << ICH9_LPC_SMI_F_BROADCAST_BIT)) {
             CPUState *cs;
             CPU_FOREACH(cs) {
+                printf("yyyyyyyyyyyyyyyyyyyy1111\n");
                 cpu_interrupt(cs, CPU_INTERRUPT_SMI);
             }
         } else {
+            printf("yyyyyyyyyyyyyyyyyyyy22222\n");
             cpu_interrupt(current_cpu, CPU_INTERRUPT_SMI);
         }
     }
