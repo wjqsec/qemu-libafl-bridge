@@ -98,7 +98,7 @@ static void ich9_smi_writel(void *opaque, hwaddr addr, uint64_t val,
     ICH9LPCPMRegs *pm = opaque;
     TCOIORegs *tr = &pm->tco_regs;
     uint64_t tco_en;
-    printf("ich9_smi_writel %p %ld\n",addr,val);
+    printf("ich9_smi_writel %lx %ld\n",addr,val);
     switch (addr) {
     case 0:
         tco_en = pm->smi_en & ICH9_PMIO_SMI_EN_TCO_EN;
