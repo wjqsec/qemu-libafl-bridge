@@ -36,7 +36,6 @@
 
 void do_smm_enter(X86CPU *cpu)
 {
-    printf("do_smm_enterdo_smm_enter\n");
     //// --- Begin LibAFL code ---
     x86_in_smm_mode = true;
     //// --- End LibAFL code ---
