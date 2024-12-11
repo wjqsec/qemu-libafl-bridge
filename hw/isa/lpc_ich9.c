@@ -464,6 +464,7 @@ static void ich9_apm_ctrl_changed(uint32_t val, void *arg)
     acpi_pm1_cnt_update(&lpc->pm.acpi_regs,
                         val == ICH9_APM_ACPI_ENABLE,
                         val == ICH9_APM_ACPI_DISABLE);
+    printf("uuuuuuuuuuuuuuuuuu00000  %d\n",val);
     if (val == ICH9_APM_ACPI_ENABLE || val == ICH9_APM_ACPI_DISABLE) {
         return;
     }
