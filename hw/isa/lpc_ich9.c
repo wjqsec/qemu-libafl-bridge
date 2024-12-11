@@ -513,7 +513,7 @@ ich9_lpc_pmbase_sci_update(ICH9LPCState *lpc)
 static void ich9_lpc_rcba_update(ICH9LPCState *lpc, uint32_t rcba_old)
 {
     uint32_t rcba = pci_get_long(lpc->d.config + ICH9_LPC_RCBA);
-    printf("qqqqqqqqqqqqqqqqqqqq\n");
+    printf("qqqqqqqqqqqqqqqqqqqq  %d\n",rcba_old);
     if (rcba_old & ICH9_LPC_RCBA_EN) {
         printf("aaaaaaaaaaaa %p\n",lpc->rcrb_mem.container);
         memory_region_del_subregion(get_system_memory(), &lpc->rcrb_mem);
