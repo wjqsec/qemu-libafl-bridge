@@ -339,7 +339,7 @@ void helper_wrmsr(CPUX86State *env)
     }
     return;
 error:
-    raise_exception_err_ra(env, EXCP0D_GPF, 0, GETPC());
+    // raise_exception_err_ra(env, EXCP0D_GPF, 0, GETPC());
 }
 
 void helper_rdmsr(CPUX86State *env)
@@ -496,9 +496,9 @@ void helper_rdmsr(CPUX86State *env)
         bql_lock();
         ret = apic_msr_read(index, &val);
         bql_unlock();
-        if (ret < 0) {
-            raise_exception_err_ra(env, EXCP0D_GPF, 0, GETPC());
-        }
+        // if (ret < 0) {
+        //     raise_exception_err_ra(env, EXCP0D_GPF, 0, GETPC());
+        // }
 
         break;
     }
