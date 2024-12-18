@@ -821,7 +821,7 @@ int qemu_main_loop(void)
     int status = EXIT_SUCCESS;
 
     while (!main_loop_should_exit(&status)) {
-        main_loop_wait(true);
+        main_loop_wait(false);
     }
 
     return status;
