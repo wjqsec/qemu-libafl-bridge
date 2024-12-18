@@ -305,6 +305,7 @@ static void *rr_cpu_thread_fn(void *arg)
     rcu_remove_force_rcu_notifier(&force_rcu);
     rcu_unregister_thread();
     return NULL;
+    rr_wait_io_event();
 }
 
 void rr_start_vcpu_thread(CPUState *cpu)
