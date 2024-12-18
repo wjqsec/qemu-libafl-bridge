@@ -111,7 +111,7 @@ static void rr_wait_io_event(void)
 
     while (all_cpu_threads_idle() && replay_can_wait()) {
         rr_stop_kick_timer();
-        qemu_cond_wait_bql(first_cpu->halt_cond);
+        // qemu_cond_wait_bql(first_cpu->halt_cond);
     }
 
     rr_start_kick_timer();
@@ -298,14 +298,13 @@ static void *rr_cpu_thread_fn(void *arg)
             qemu_notify_event();
         }
 
-        // rr_wait_io_event();
+        rr_wait_io_event();
         rr_deal_with_unplugged_cpus();
     }
 
     rcu_remove_force_rcu_notifier(&force_rcu);
     rcu_unregister_thread();
     return NULL;
-    rr_wait_io_event();
 }
 
 void rr_start_vcpu_thread(CPUState *cpu)
