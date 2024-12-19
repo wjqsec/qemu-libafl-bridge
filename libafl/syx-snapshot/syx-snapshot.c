@@ -768,7 +768,7 @@ static SyxSnapshotRoot* syx_snapshot_root_from_file(const char *filename) {
         if (!fread(&hash, sizeof(hash), 1, f))
             break;
         SyxSnapshotRAMBlock *snapshot_rb = g_new(SyxSnapshotRAMBlock, 1);
-        fread(&snapshot_rb->used_length, sizeof(snapshot_rb->used_length), 1 f);
+        fread(&snapshot_rb->used_length, sizeof(snapshot_rb->used_length), 1, f);
         snapshot_rb->ram = g_new(uint8_t,snapshot_rb->used_length);
         fread(snapshot_rb->ram, snapshot_rb->used_length, 1, f);
         g_hash_table_insert(root->rbs_snapshot, hash, snapshot_rb);
@@ -776,7 +776,7 @@ static SyxSnapshotRoot* syx_snapshot_root_from_file(const char *filename) {
     fclose(f);
     return root;
 }
-SyxSnapshot *snapshot syx_snapshot_from_file(bool track, bool is_active_bdrv_cache, const char *filename) {
+SyxSnapshot *syx_snapshot_from_file(bool track, bool is_active_bdrv_cache, const char *filename) {
     SyxSnapshot *snapshot = g_new0(SyxSnapshot, 1);
 
     snapshot->root_snapshot = syx_snapshot_root_from_file(filename);
