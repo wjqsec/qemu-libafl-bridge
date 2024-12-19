@@ -748,23 +748,24 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
                           inner_block->idstr, block->idstr);
                 exit(1);
             }
-            printf("save ram %s\n",block->idstr);
-            if (fwrite(&block->idstr_hash, sizeof(block->idstr_hash), 1, f) != 1) {
-                fclose(f);
-                printf("save ram id hash to file error\n");
-                return false;
-            }
-            if (fwrite(&block->used_length, sizeof(block->used_length), 1, f) != 1) {
-                fclose(f);
-                printf("save ram length to file error\n");
-                return false;
-            }
-            if (fwrite(block->host, block->used_length, 1, f) != 1) {
-                fclose(f);
-                printf("save ram data to file error\n");
-                return false;
-            }
         }
+        printf("save ram %s %x\n",block->idstr,block->idstr_hash);
+        if (fwrite(&block->idstr_hash, sizeof(block->idstr_hash), 1, f) != 1) {
+            fclose(f);
+            printf("save ram id hash to file error\n");
+            return false;
+        }
+        if (fwrite(&block->used_length, sizeof(block->used_length), 1, f) != 1) {
+            fclose(f);
+            printf("save ram length to file error\n");
+            return false;
+        }
+        if (fwrite(block->host, block->used_length, 1, f) != 1) {
+            fclose(f);
+            printf("save ram data to file error\n");
+            return false;
+        }
+        printf("save ram %s %x end\n",block->idstr,block->idstr_hash);
     }
     fclose(f);
     return true;
@@ -815,14 +816,14 @@ bool syx_state_restore_from_file(const char *filename) {
                             inner_block->idstr, block->idstr);
                     exit(1);
                 }
-                if (block->idstr_hash == idstr_hash) {
-                    if (fread(block->host, ram_len, 1, f) != 1) {
-                        printf("read ram data error\n");
-                        fclose(f);
-                        return false;
-                    }
-                    restore_ram = true;
+            }
+            if (block->idstr_hash == idstr_hash) {
+                if (fread(block->host, ram_len, 1, f) != 1) {
+                    printf("read ram data error\n");
+                    fclose(f);
+                    return false;
                 }
+                restore_ram = true;
             }
         }
         if (!restore_ram) {
