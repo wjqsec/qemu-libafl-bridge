@@ -723,17 +723,22 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
         printf("error open file %s for write\n",filename);
         return false;
     }
-    DeviceSaveState* state = device_save_kind_all(kind, devices);
+    DeviceSaveState* state = device_save_kind(kind, devices);
     if (!state) {
-        printf("save state error\n");
+        fclose(f);
+        printf("save device state error\n");
+        return false;
+    }
+    if (fwrite(&state->save_buffer_size, sizeof(state->save_buffer_size), 1, f) != 1) {
+        fclose(f);
+        printf("save state size to file error\n");
         return false;
     }
     if (fwrite(state->save_buffer, state->save_buffer_size, 1, f) != 1) {
-        printf("save state to file error\n");
+        fclose(f);
+        printf("save state buf to file error\n");
         return false;
     }
-    fclose(f);
-
     RAMBlock *block;
     RAMBlock *inner_block;
     RAMBLOCK_FOREACH(block) {
@@ -743,10 +748,24 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
                           inner_block->idstr, block->idstr);
                 exit(1);
             }
-            printf("ram size %lx\n",block->used_length);
+            if (fwrite(&block->idstr_hash, sizeof(block->idstr_hash), 1, f) != 1) {
+                fclose(f);
+                printf("save ram id hash to file error\n");
+                return false;
+            }
+            if (fwrite(&block->used_length, sizeof(block->used_length), 1, f) != 1) {
+                fclose(f);
+                printf("save ram length to file error\n");
+                return false;
+            }
+            if (fwrite(block->host, block->used_length, 1, f) != 1) {
+                fclose(f);
+                printf("save ram data to file error\n");
+                return false;
+            }
         }
-
     }
+    fclose(f);
     return true;
 
 }
@@ -759,18 +778,57 @@ bool syx_state_restore_from_file(const char *filename) {
         return false;
     }
     DeviceSaveState* dss = g_new0(DeviceSaveState, 1);
-    fseek(f, 0, SEEK_END);
-    long fsize = ftell(f);
-    fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
 
-    dss->save_buffer_size = fsize;
     dss->save_buffer = g_new(uint8_t, QEMU_FILE_RAM_LIMIT);
+    if (fread(&dss->save_buffer_size, sizeof(dss->save_buffer_size), 1, f) != 1) {
+        printf("read device length error\n");
+        fclose(f);
+        return false;
+    }
     if (fread(dss->save_buffer, dss->save_buffer_size, 1, f) != 1) {
-        printf("read state file error\n");
+        printf("read device data error\n");
         fclose(f);
         return false;
     }
     device_restore_all(dss);
+
+    guint idstr_hash;
+    ram_addr_t ram_len;
+    while (true) {
+        if (fread(&idstr_hash, sizeof(idstr_hash), 1, f) != 1) {
+            break;
+        }
+        if (fread(&ram_len, sizeof(ram_len), 1, f) != 1) {
+            printf("read ram length error\n");
+            fclose(f);
+            return false;
+        }
+        bool restore_ram = false;
+        RAMBlock *block;
+        RAMBlock *inner_block;
+        RAMBLOCK_FOREACH(block) {
+            RAMBLOCK_FOREACH(inner_block) {
+                if (block != inner_block && inner_block->idstr_hash == block->idstr_hash) {
+                    SYX_ERROR("Hash collision detected on RAMBlocks %s and %s, snapshotting will not work correctly.",
+                            inner_block->idstr, block->idstr);
+                    exit(1);
+                }
+                if (block->idstr_hash == idstr_hash) {
+                    if (fread(block->host, ram_len, 1, f) != 1) {
+                        printf("read ram data error\n");
+                        fclose(f);
+                        return false;
+                    }
+                    restore_ram = true;
+                }
+            }
+        }
+        if (!restore_ram) {
+            printf("restore ram not found\n");
+            fclose(f);
+            return false;
+        }
+    }
     fclose(f);
     return true;
 }
