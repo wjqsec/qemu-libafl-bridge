@@ -749,7 +749,6 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
                 exit(1);
             }
         }
-        printf("save ram %s %x\n",block->idstr,block->idstr_hash);
         if (fwrite(&block->idstr_hash, sizeof(block->idstr_hash), 1, f) != 1) {
             fclose(f);
             printf("save ram id hash to file error\n");
@@ -765,9 +764,10 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
             printf("save ram data to file error\n");
             return false;
         }
-        printf("save ram %s %x end\n",block->idstr,block->idstr_hash);
     }
     fclose(f);
+    g_free(state->save_buffer);
+    g_free(state);
     return true;
 
 }
@@ -793,7 +793,8 @@ bool syx_state_restore_from_file(const char *filename) {
         return false;
     }
     device_restore_all(dss);
-
+    g_free(dss->save_buffer);
+    g_free(dss);
     guint idstr_hash;
     ram_addr_t ram_len;
     while (true) {
@@ -828,8 +829,8 @@ bool syx_state_restore_from_file(const char *filename) {
         }
         if (!restore_ram) {
             printf("restore ram not found\n");
-            // fclose(f);
-            // return false;
+            fclose(f);
+            return false;
         }
     }
     fclose(f);
