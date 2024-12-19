@@ -806,7 +806,6 @@ bool syx_state_restore_from_file(const char *filename) {
             fclose(f);
             return false;
         }
-        printf("restore ram %x\n",idstr_hash);
         bool restore_ram = false;
         RAMBlock *block;
         RAMBlock *inner_block;
