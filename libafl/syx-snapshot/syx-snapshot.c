@@ -774,6 +774,7 @@ static SyxSnapshotRoot* syx_snapshot_root_from_file(const char *filename) {
         g_hash_table_insert(root->rbs_snapshot, hash, snapshot_rb);
     }
     fclose(f);
+    (void)ret;
     return root;
 }
 SyxSnapshot *syx_snapshot_from_file(bool track, bool is_active_bdrv_cache, const char *filename) {
