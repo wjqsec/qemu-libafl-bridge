@@ -748,6 +748,7 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
                           inner_block->idstr, block->idstr);
                 exit(1);
             }
+            printf("save ram %s\n",block->idstr);
             if (fwrite(&block->idstr_hash, sizeof(block->idstr_hash), 1, f) != 1) {
                 fclose(f);
                 printf("save ram id hash to file error\n");
@@ -825,8 +826,8 @@ bool syx_state_restore_from_file(const char *filename) {
         }
         if (!restore_ram) {
             printf("restore ram not found\n");
-            fclose(f);
-            return false;
+            // fclose(f);
+            // return false;
         }
     }
     fclose(f);
