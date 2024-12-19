@@ -743,7 +743,7 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
                           inner_block->idstr, block->idstr);
                 exit(1);
             }
-            printf("ram size %x\n",block->used_length);
+            printf("ram size %lx\n",block->used_length);
         }
 
     }
