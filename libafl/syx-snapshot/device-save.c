@@ -83,6 +83,54 @@ DeviceSaveState* device_save_kind(DeviceSnapshotKind kind, char** names) {
 
     return dss;
 }
+DeviceSaveState* device_save_kind_all(DeviceSnapshotKind kind, char** names) {
+    DeviceSaveState* dss = g_new0(DeviceSaveState, 1);
+    SaveStateEntry *se;
+
+    dss->kind = DEVICE_SAVE_KIND_FULL;
+    dss->save_buffer = g_new(uint8_t, QEMU_FILE_RAM_LIMIT);
+
+    QIOChannelBufferWriteback* wbioc = qio_channel_buffer_writeback_new(QEMU_FILE_RAM_LIMIT, dss->save_buffer, QEMU_FILE_RAM_LIMIT, &dss->save_buffer_size);
+    QIOChannel* ioc = QIO_CHANNEL(wbioc);
+
+    QEMUFile* f = qemu_file_new_output(ioc);
+    
+    QTAILQ_FOREACH(se, &savevm_state.handlers, entry) {
+        int ret;
+        
+        switch (kind) {
+            case DEVICE_SNAPSHOT_ALLOWLIST:
+                if (!is_in_list(se->idstr, names)) {
+                    continue;
+                }
+                break;
+            case DEVICE_SNAPSHOT_DENYLIST:
+                if (is_in_list(se->idstr, names)) {
+                    continue;
+                }
+                break;
+            default:
+                break;
+        }
+
+        // SYX_PRINTF("Saving section %s...\n", se->idstr);
+
+        ret = vmstate_save(f, se, NULL);
+
+        if (ret) {
+            SYX_PRINTF("Device save all error: %d\n", ret);
+            abort();
+        }
+    }
+
+    qemu_put_byte(f, QEMU_VM_EOF);
+
+    qemu_fclose(f);
+
+    return dss;
+}
+
+
 
 void device_restore_all(DeviceSaveState* dss) {
     assert(dss->save_buffer != NULL);

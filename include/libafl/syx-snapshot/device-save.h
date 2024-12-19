@@ -19,7 +19,7 @@ typedef enum DeviceSnapshotKind {
 
 DeviceSaveState* device_save_all(void);
 DeviceSaveState* device_save_kind(DeviceSnapshotKind kind, char** names);
-
+DeviceSaveState* device_save_kind_all(DeviceSnapshotKind kind, char** names);
 void device_restore_all(DeviceSaveState* device_save_state);
 void device_free_all(DeviceSaveState* dss);
 
