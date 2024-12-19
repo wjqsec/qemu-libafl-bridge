@@ -133,5 +133,5 @@ bool syx_snapshot_cow_cache_write_entry(BlockBackend *blk, int64_t offset, int64
                                BdrvRequestFlags flags);
 
 
-bool state_restore_from_file(const char *filename);
-bool state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filename);
+bool syx_state_restore_from_file(const char *filename);
+bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filename);

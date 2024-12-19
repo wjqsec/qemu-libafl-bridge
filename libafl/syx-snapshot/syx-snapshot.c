@@ -717,7 +717,7 @@ bool syx_snapshot_cow_cache_write_entry(BlockBackend *blk, int64_t offset, int64
     }
 }
 
-bool state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filename) {
+bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filename) {
     FILE *f = fopen(filename, "wb");
     if (!f) {
         printf("error open file %s for write\n",filename);
@@ -738,7 +738,7 @@ bool state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filename)
 }
 
 
-bool state_restore_from_file(const char *filename) {
+bool syx_state_restore_from_file(const char *filename) {
     FILE *f = fopen(filename, "rb");
     if (!f) {
         printf("error open file %s for write\n",filename);
