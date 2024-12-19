@@ -497,7 +497,8 @@ bdrv_all_get_snapshot_devices(bool has_devices, strList *devices,
                 error_setg(errp, "No block device node '%s'", devices->value);
                 return -1;
             }
-            bdrvs = g_list_append(bdrvs, bs);
+            if (!strstr(bdrv_get_device_or_node_name(bs), "pflash"))
+                bdrvs = g_list_append(bdrvs, bs);
             devices = devices->next;
         }
     } else {
