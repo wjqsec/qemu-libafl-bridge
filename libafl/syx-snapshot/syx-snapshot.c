@@ -3,7 +3,7 @@
 #include "sysemu/sysemu.h"
 #include "migration/vmstate.h"
 #include "cpu.h"
-
+#include "libafl/syx-snapshot/channel-buffer-writeback.h"
 #include "exec/ramlist.h"
 #include "exec/ram_addr.h"
 #include "exec/exec-all.h"
@@ -755,10 +755,10 @@ static SyxSnapshotRoot* syx_snapshot_root_from_file(const char *filename) {
     SyxSnapshotRoot* root = g_new0(SyxSnapshotRoot, 1);
     DeviceSaveState* dss = g_new0(DeviceSaveState, 1);
     
-    fread(&dss->kind,sizeof(dss->kind),1,f);
-    fread(&dss->save_buffer_size,sizeof(dss->save_buffer_size),1,f);
+    size_t ret = fread(&dss->kind,sizeof(dss->kind),1,f);
+    ret = fread(&dss->save_buffer_size,sizeof(dss->save_buffer_size),1,f);
     dss->save_buffer = g_new(uint8_t, QEMU_FILE_RAM_LIMIT);
-    fread(dss->save_buffer,dss->save_buffer_size,1,f);
+    ret = fread(dss->save_buffer,dss->save_buffer_size,1,f);
 
     root->rbs_snapshot = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, destroy_ramblock_snapshot);
     root->dss = dss;
@@ -768,9 +768,9 @@ static SyxSnapshotRoot* syx_snapshot_root_from_file(const char *filename) {
         if (!fread(&hash, sizeof(hash), 1, f))
             break;
         SyxSnapshotRAMBlock *snapshot_rb = g_new(SyxSnapshotRAMBlock, 1);
-        fread(&snapshot_rb->used_length, sizeof(snapshot_rb->used_length), 1, f);
+        ret = fread(&snapshot_rb->used_length, sizeof(snapshot_rb->used_length), 1, f);
         snapshot_rb->ram = g_new(uint8_t,snapshot_rb->used_length);
-        fread(snapshot_rb->ram, snapshot_rb->used_length, 1, f);
+        ret = fread(snapshot_rb->ram, snapshot_rb->used_length, 1, f);
         g_hash_table_insert(root->rbs_snapshot, hash, snapshot_rb);
     }
     fclose(f);
