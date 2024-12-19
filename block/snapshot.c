@@ -504,7 +504,8 @@ bdrv_all_get_snapshot_devices(bool has_devices, strList *devices,
         BlockDriverState *bs;
         BdrvNextIterator it;
         for (bs = bdrv_first(&it); bs; bs = bdrv_next(&it)) {
-            bdrvs = g_list_append(bdrvs, bs);
+            if (!strstr(bdrv_get_device_or_node_name(bs), "pflash"))
+                bdrvs = g_list_append(bdrvs, bs);
         }
     }
 
