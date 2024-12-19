@@ -733,6 +733,20 @@ bool syx_state_save_to_file(DeviceSnapshotKind kind, char** devices, char *filen
         return false;
     }
     fclose(f);
+
+    RAMBlock *block;
+    RAMBlock *inner_block;
+    RAMBLOCK_FOREACH(block) {
+        RAMBLOCK_FOREACH(inner_block) {
+            if (block != inner_block && inner_block->idstr_hash == block->idstr_hash) {
+                SYX_ERROR("Hash collision detected on RAMBlocks %s and %s, snapshotting will not work correctly.",
+                          inner_block->idstr, block->idstr);
+                exit(1);
+            }
+            printf("ram size %x\n",block->used_length);
+        }
+
+    }
     return true;
 
 }
