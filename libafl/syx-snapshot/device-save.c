@@ -97,7 +97,9 @@ DeviceSaveState* device_save_kind_all(DeviceSnapshotKind kind, char** names) {
     
     QTAILQ_FOREACH(se, &savevm_state.handlers, entry) {
         int ret;
-        
+        if (!strcmp(se->idstr, "globalstate")) {
+            continue;
+        }
         switch (kind) {
             case DEVICE_SNAPSHOT_ALLOWLIST:
                 if (!is_in_list(se->idstr, names)) {
