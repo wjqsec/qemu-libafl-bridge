@@ -758,5 +758,5 @@ bool state_restore_from_file(const char *filename) {
     }
     device_restore_all(dss);
     fclose(f);
-    
+    return true;
 }
