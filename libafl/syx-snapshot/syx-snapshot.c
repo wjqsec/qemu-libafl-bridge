@@ -58,6 +58,15 @@ typedef struct SyxSnapshotIncrement {
     GHashTable *rbs_dirty_pages; // hash map: H(rb) -> SyxSnapshotDirtyPageList
 } SyxSnapshotIncrement;
 
+typedef struct SnapshotOnDisk {
+    uint8_t devstate_kind;
+    uint32_t save_buffer_size;
+    uint8_t save_buffer[0];
+
+    uint64_t hash;
+    uint64_t len;
+    uint8_t buf[0];
+} SnapshotOnDisk;
 
 SyxSnapshotState syx_snapshot_state = {0};
 static MemoryRegion* mr_to_enable = NULL;
@@ -638,6 +647,8 @@ static void restore_full_root(gpointer rb_idstr_hash, gpointer rb_block, gpointe
     block = ramblock_lookup(rb_idstr_hash);
     if (block)
         memcpy(block->host, snap_block->ram, snap_block->used_length);
+    else
+        printf("error, ramblock not found\n");
 }
 void syx_snapshot_root_restore(SyxSnapshot *snapshot, bool full_root_restore) {
     // health check.
@@ -704,4 +715,98 @@ bool syx_snapshot_cow_cache_write_entry(BlockBackend *blk, int64_t offset, int64
         assert(syx_cow_cache_write_entry(syx_snapshot_state.active_bdrv_cache_snapshot->bdrvs_cow_cache, blk, offset, bytes, qiov, qiov_offset, flags));
         return true;
     }
+}
+
+
+static void syx_snapshot_ram_to_file(gpointer rb_idstr_hash, gpointer rb_block, gpointer args_ptr) {
+    SyxSnapshotRAMBlock *snap_block = rb_block;
+    FILE *f = args_ptr;
+    fwrite(&rb_idstr_hash,sizeof(rb_idstr_hash),1,f);
+    fwrite(&snap_block->used_length,sizeof(snap_block->used_length),1,f);
+    fwrite(snap_block->ram,snap_block->used_length,1,f);
+}
+
+bool syx_snapshot_to_file(SyxSnapshot *snapshot, const char *filename) {
+    FILE *f = fopen(filename,"wb");
+    if (!f) {
+        printf("open snapshot file %s error\n",filename);
+        return false;
+    }
+    if (snapshot->last_incremental_snapshot) {
+        printf("incremental snapshot not support\n");
+        return false;
+    }
+    SyxSnapshotRoot* root_snapshot = snapshot->root_snapshot;
+    fwrite(&root_snapshot->dss->kind,sizeof(root_snapshot->dss->kind),1,f);
+    fwrite(&root_snapshot->dss->save_buffer_size,sizeof(root_snapshot->dss->save_buffer_size),1,f);
+    fwrite(root_snapshot->dss->save_buffer,root_snapshot->dss->save_buffer_size,1,f);
+
+    g_hash_table_foreach(root_snapshot->rbs_snapshot, syx_snapshot_ram_to_file, f);
+    fclose(f);
+    return true;
+}
+
+static SyxSnapshotRoot* syx_snapshot_root_from_file(const char *filename) {
+    FILE *f = fopen(filename,"rb");
+    if (!f) {
+        printf("open snapshot file %s error\n",filename);
+        return NULL;
+    }
+    SyxSnapshotRoot* root = g_new0(SyxSnapshotRoot, 1);
+    DeviceSaveState* dss = g_new0(DeviceSaveState, 1);
+    
+    fread(&dss->kind,sizeof(dss->kind),1,f);
+    fread(&dss->save_buffer_size,sizeof(dss->save_buffer_size),1,f);
+    dss->save_buffer = g_new(uint8_t, QEMU_FILE_RAM_LIMIT);
+    fread(dss->save_buffer,dss->save_buffer_size,1,f);
+
+    root->rbs_snapshot = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, destroy_ramblock_snapshot);
+    root->dss = dss;
+
+    gpointer hash;
+    while (true) {
+        if (!fread(&hash, sizeof(hash), 1, f))
+            break;
+        SyxSnapshotRAMBlock *snapshot_rb = g_new(SyxSnapshotRAMBlock, 1);
+        fread(&snapshot_rb->used_length, sizeof(snapshot_rb->used_length), 1 f);
+        snapshot_rb->ram = g_new(uint8_t,snapshot_rb->used_length);
+        fread(snapshot_rb->ram, snapshot_rb->used_length, 1, f);
+        g_hash_table_insert(root->rbs_snapshot, hash, snapshot_rb);
+    }
+    fclose(f);
+    return root;
+}
+SyxSnapshot *snapshot syx_snapshot_from_file(bool track, bool is_active_bdrv_cache, const char *filename) {
+    SyxSnapshot *snapshot = g_new0(SyxSnapshot, 1);
+
+    snapshot->root_snapshot = syx_snapshot_root_from_file(filename);
+    if (snapshot->root_snapshot == NULL) {
+        g_free(snapshot);
+        return NULL;
+    }
+    snapshot->last_incremental_snapshot = NULL;
+    snapshot->rbs_dirty_list = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL,
+                                                     (GDestroyNotify) g_hash_table_remove_all);
+    snapshot->bdrvs_cow_cache = syx_cow_cache_new();
+
+    if (is_active_bdrv_cache) {
+        syx_cow_cache_move(snapshot->bdrvs_cow_cache, &syx_snapshot_state.before_fuzz_cache);
+        syx_snapshot_state.active_bdrv_cache_snapshot = snapshot;
+    } else {
+        syx_cow_cache_push_layer(snapshot->bdrvs_cow_cache, SYX_SNAPSHOT_COW_CACHE_DEFAULT_CHUNK_SIZE, SYX_SNAPSHOT_COW_CACHE_DEFAULT_MAX_BLOCKS);
+    }
+
+    if (track) {
+        syx_snapshot_track(&syx_snapshot_state.tracked_snapshots, snapshot);
+    }
+
+#ifdef CONFIG_DEBUG_TCG
+    SYX_PRINTF("[Snapshot Creation] Checking snapshot memory consistency\n");
+    g_hash_table_foreach(snapshot->rbs_dirty_list, root_restore_check_memory_rb, snapshot);
+    SYX_PRINTF("[Snapshot Creation] Memory is consistent.\n");
+#endif
+
+    syx_snapshot_state.is_enabled = true;
+
+    return snapshot;
 }

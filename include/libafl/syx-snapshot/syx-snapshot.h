@@ -131,3 +131,7 @@ bool syx_snapshot_cow_cache_read_entry(BlockBackend *blk, int64_t offset, int64_
 
 bool syx_snapshot_cow_cache_write_entry(BlockBackend *blk, int64_t offset, int64_t bytes, QEMUIOVector *qiov, size_t qiov_offset,
                                BdrvRequestFlags flags);
+
+
+SyxSnapshot *snapshot syx_snapshot_from_file(bool track, bool is_active_bdrv_cache, const char *filename);
+bool syx_snapshot_to_file(SyxSnapshot *snapshot, const char *filename);
