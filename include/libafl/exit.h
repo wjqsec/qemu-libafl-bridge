@@ -69,4 +69,4 @@ void libafl_qemu_trigger_breakpoint(CPUState* cpu);
 void libafl_qemu_exit_timeout(CPUState* cpu);
 void libafl_qemu_exit_stream_notfound(CPUState* cpu);
 void libafl_qemu_exit_stream_outof(CPUState* cpu);
-
+bool libafl_qemu_cpu_stopped(CPUState* cpu);
