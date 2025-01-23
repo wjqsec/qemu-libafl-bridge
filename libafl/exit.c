@@ -162,3 +162,7 @@ void libafl_qemu_exit_stream_outof(CPUState* cpu)
     CPUClass* cc = CPU_GET_CLASS(cpu);
     prepare_qemu_exit(cpu, cc->get_pc(cpu));
 }
+bool libafl_qemu_cpu_stopped(CPUState* cpu)
+{
+    return cpu->stopped;
+}

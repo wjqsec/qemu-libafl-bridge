@@ -10,7 +10,6 @@
 
 #include "libafl/syx-snapshot/syx-snapshot.h"
 #include "libafl/syx-snapshot/device-save.h"
-#include "libafl/exit.h"
 
 #define SYX_SNAPSHOT_LIST_INIT_SIZE      4096
 #define SYX_SNAPSHOT_LIST_GROW_FACTOR    2
@@ -655,9 +654,7 @@ void syx_snapshot_root_restore(SyxSnapshot *snapshot, bool full_root_restore) {
     // health check.
     CPUState *cpu;
     CPU_FOREACH(cpu) {
-        if (cpu->stopped) {
-            libafl_qemu_exit_timeout(cpu);
-        }
+        assert(cpu->stopped);
     }
 
     bool must_unlock_bql = false;
