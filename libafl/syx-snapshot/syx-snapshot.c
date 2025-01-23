@@ -10,6 +10,7 @@
 
 #include "libafl/syx-snapshot/syx-snapshot.h"
 #include "libafl/syx-snapshot/device-save.h"
+#include "libafl/exit.h"
 
 #define SYX_SNAPSHOT_LIST_INIT_SIZE      4096
 #define SYX_SNAPSHOT_LIST_GROW_FACTOR    2
