@@ -654,7 +654,9 @@ void syx_snapshot_root_restore(SyxSnapshot *snapshot, bool full_root_restore) {
     // health check.
     CPUState *cpu;
     CPU_FOREACH(cpu) {
-        assert(cpu->stopped);
+        if (cpu->stopped) {
+            libafl_qemu_exit_timeout(cpu);
+        }
     }
 
     bool must_unlock_bql = false;
