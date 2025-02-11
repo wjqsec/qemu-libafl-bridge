@@ -883,3 +883,13 @@ void libafl_qemu_flush_tb(void)
         tb_flush(cpu);
     }
 }
+
+bool in_fuzz = false;
+bool libafl_qemu_get_infuzz(void)
+{
+    return in_fuzz;
+}
+void libafl_qemu_set_infuzz(bool infuzz)
+{
+    in_fuzz = infuzz;
+}

@@ -286,3 +286,5 @@ int libafl_qemu_remove_pre_memrw_hook(size_t num, int invalidate);
 bool libafl_qemu_in_smm_mode(void);
 target_ulong libafl_page_offset_from_addr(target_ulong addr);
 void libafl_qemu_flush_tb(void);
+bool libafl_qemu_get_infuzz(void);
+void libafl_qemu_set_infuzz(bool infuzz);
