@@ -876,3 +876,10 @@ bool libafl_qemu_in_smm_mode(void)
 {
     return x86_in_smm_mode;
 }
+void libafl_qemu_flush_tb(void)
+{
+    CPUState *cpu;
+    CPU_FOREACH(cpu) {
+        tb_flush(cpu, 1);
+    }
+}
