@@ -880,6 +880,6 @@ void libafl_qemu_flush_tb(void)
 {
     CPUState *cpu;
     CPU_FOREACH(cpu) {
-        tb_flush(cpu, 1);
+        tb_flush(cpu);
     }
 }
