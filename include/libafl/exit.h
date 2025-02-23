@@ -25,6 +25,7 @@ enum libafl_exit_reason_kind {
     TIMEOUT = 3,
     STREAM_NOTFOUND = 4,
     STREAM_OUTOF = 5,
+    CRASH = 6,
 };
 
 // A breakpoint has been triggered.
@@ -69,4 +70,5 @@ void libafl_qemu_trigger_breakpoint(CPUState* cpu);
 void libafl_qemu_exit_timeout(CPUState* cpu);
 void libafl_qemu_exit_stream_notfound(CPUState* cpu);
 void libafl_qemu_exit_stream_outof(CPUState* cpu);
+void libafl_qemu_exit_crash(CPUState* cpu);
 bool libafl_qemu_cpu_stopped(CPUState* cpu);
