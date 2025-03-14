@@ -262,7 +262,6 @@ void helper_rsm(CPUX86State *env)
     if (val & 0x20000) {
         env->smbase = x86_ldl_phys(cs, sm_state + 0x7f00);
     }
-    printf("rsm %lx %lx\n",sm_state + 0x7f78,env->eip);
 #else
     cpu_x86_update_cr0(env, x86_ldl_phys(cs, sm_state + 0x7ffc));
     cpu_x86_update_cr3(env, x86_ldl_phys(cs, sm_state + 0x7ff8));
