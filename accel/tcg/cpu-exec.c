@@ -719,7 +719,7 @@ static inline bool cpu_handle_exception(CPUState *cpu, int *ret)
     }
 
     //// --- End LibAFL code ---
-    printf("intc %d %d\n",cpu->exception_index,  EXCP_INTERRUPT);
+
     if (cpu->exception_index < 0) {
 #ifndef CONFIG_USER_ONLY
         if (replay_has_exception()
@@ -805,7 +805,7 @@ static inline bool cpu_handle_interrupt(CPUState *cpu,
     if (cpu->cflags_next_tb != -1 && cpu->cflags_next_tb & CF_NOIRQ) {
         return false;
     }
-
+    printf("cpu_handle_interrupt");
     /* Clear the interrupt flag now since we're processing
      * cpu->interrupt_request and cpu->exit_request.
      * Ensure zeroing happens before reading cpu->exit_request or
