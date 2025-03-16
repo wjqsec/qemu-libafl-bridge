@@ -719,7 +719,7 @@ static inline bool cpu_handle_exception(CPUState *cpu, int *ret)
     }
 
     //// --- End LibAFL code ---
-
+    printf("intc %d %d\n",cpu->exception_index,  EXCP_INTERRUPT);
     if (cpu->exception_index < 0) {
 #ifndef CONFIG_USER_ONLY
         if (replay_has_exception()
