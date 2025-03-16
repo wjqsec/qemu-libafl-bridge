@@ -805,7 +805,6 @@ static inline bool cpu_handle_interrupt(CPUState *cpu,
     if (cpu->cflags_next_tb != -1 && cpu->cflags_next_tb & CF_NOIRQ) {
         return false;
     }
-    printf("cpu_handle_interrupt\n");
     /* Clear the interrupt flag now since we're processing
      * cpu->interrupt_request and cpu->exit_request.
      * Ensure zeroing happens before reading cpu->exit_request or
