@@ -112,6 +112,7 @@ void do_smm_enter(X86CPU *cpu)
 
     x86_stl_phys(cs, sm_state + 0x7efc, SMM_REVISION_ID);
     x86_stl_phys(cs, sm_state + 0x7f00, env->smbase);
+    print("enter smm rsp:%lx\n",env->regs[R_ESP]);
 #else
     x86_stl_phys(cs, sm_state + 0x7ffc, env->cr[0]);
     x86_stl_phys(cs, sm_state + 0x7ff8, env->cr[3]);
@@ -262,6 +263,7 @@ void helper_rsm(CPUX86State *env)
     if (val & 0x20000) {
         env->smbase = x86_ldl_phys(cs, sm_state + 0x7f00);
     }
+    print("exit smm rsp:%lx\n",env->regs[R_ESP]);
 #else
     cpu_x86_update_cr0(env, x86_ldl_phys(cs, sm_state + 0x7ffc));
     cpu_x86_update_cr3(env, x86_ldl_phys(cs, sm_state + 0x7ff8));
