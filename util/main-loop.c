@@ -298,13 +298,11 @@ static int os_host_main_loop_wait(int64_t timeout)
     g_main_context_acquire(context);
 
     glib_pollfds_fill(&timeout);
-    do {
-        bql_unlock();
-        replay_mutex_unlock();
 
-        ret = qemu_poll_ns((GPollFD *)gpollfds->data, gpollfds->len, 3000000000);
-    } while(ret <= 0);
-    
+    bql_unlock();
+    replay_mutex_unlock();
+
+    ret = qemu_poll_ns((GPollFD *)gpollfds->data, gpollfds->len, timeout);
 
     replay_mutex_lock();
     bql_lock();
@@ -570,7 +568,7 @@ void main_loop_wait(int nonblocking)
     int64_t timeout_ns;
 
     if (nonblocking) {
-        mlpoll.timeout = 0;
+        mlpoll.timeout = 5000;
     }
 
     /* poll any events */
