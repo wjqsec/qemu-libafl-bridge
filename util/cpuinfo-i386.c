@@ -98,6 +98,16 @@ unsigned __attribute__((constructor)) cpuinfo_init(void)
 #endif
 
     info |= CPUINFO_ALWAYS;
+    info &= ~CPUINFO_SSE2;
+    info &= ~CPUINFO_SSE4;
+    info &= ~CPUINFO_AVX1;
+    info &= ~CPUINFO_AVX2;
+    info &= ~CPUINFO_AVX512F;
+    info &= ~CPUINFO_AVX512VL;
+    info &= ~CPUINFO_AVX512BW;
+    info &= ~CPUINFO_AVX512DQ;
+    info &= ~CPUINFO_AVX512VBMI2;
+
     cpuinfo = info;
     return info;
 }
