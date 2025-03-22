@@ -129,7 +129,7 @@ static void pit_ioport_write(void *opaque, hwaddr addr,
     PITCommonState *pit = opaque;
     int channel, access;
     PITChannelState *s;
-
+    printf("pit_ioport_write %lx $%lx %d\n", addr, val, size);
     addr &= 3;
     if (addr == 3) {
         channel = val >> 6;
