@@ -303,6 +303,9 @@ static int os_host_main_loop_wait(int64_t timeout)
     replay_mutex_unlock();
 
     ret = qemu_poll_ns((GPollFD *)gpollfds->data, gpollfds->len, timeout);
+    if (ret == 0) {
+        exit(0);
+    }
 
     replay_mutex_lock();
     bql_lock();
