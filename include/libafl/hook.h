@@ -267,7 +267,7 @@ size_t libafl_add_post_rdmsr_hook(void (*callback)(uint64_t data, uint32_t in_ec
 int libafl_qemu_remove_post_rdmsr_hook(size_t num, int invalidate);
 
 struct libafl_pre_wrmsr_hook {
-    void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx);
+    void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx, bool *handled);
     uint64_t data;
 };
 extern struct libafl_pre_wrmsr_hook* libafl_pre_wrmsr_hooks;

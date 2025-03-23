@@ -830,7 +830,7 @@ int libafl_qemu_remove_post_rdmsr_hook(size_t num, int invalidate)
 }
 
 struct libafl_pre_wrmsr_hook* libafl_pre_wrmsr_hooks;
-size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx),
+size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx, bool *handled),
                                         uint64_t data)
 {
     struct libafl_pre_wrmsr_hook *hook = calloc(sizeof(struct libafl_pre_wrmsr_hook),1);

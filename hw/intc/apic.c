@@ -940,7 +940,7 @@ static int apic_register_write(int index, uint64_t val)
 {
     DeviceState *dev;
     APICCommonState *s;
-    printf("apic_register_write index %d val %lx\n", index, val);
+
     dev = cpu_get_current_apic();
     if (!dev) {
         return -1;
