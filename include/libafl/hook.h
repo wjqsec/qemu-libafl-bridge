@@ -271,7 +271,7 @@ struct libafl_pre_wrmsr_hook {
     uint64_t data;
 };
 extern struct libafl_pre_wrmsr_hook* libafl_pre_wrmsr_hooks;
-size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx),
+size_t libafl_add_pre_wrmsr_hook(void (*callback)(uint64_t data, uint32_t in_ecx, uint32_t *in_eax, uint32_t *in_edx, bool *handled),
                                         uint64_t data);
 int libafl_qemu_remove_pre_wrmsr_hook(size_t num, int invalidate);
 
