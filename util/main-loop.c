@@ -568,7 +568,7 @@ void main_loop_wait(int nonblocking)
     int64_t timeout_ns;
 
     if (nonblocking) {
-        mlpoll.timeout = 10000;
+        mlpoll.timeout = 0;
     }
 
     /* poll any events */
