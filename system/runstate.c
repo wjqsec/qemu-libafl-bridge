@@ -757,7 +757,7 @@ static bool main_loop_should_exit(int *status)
 
     if (qemu_debug_requested()) {
         vm_stop(RUN_STATE_DEBUG);
-        printf("1111111111111\n");
+
 //// --- Begin LibAFL code ---
 #ifdef AS_LIB
         return true;    // exit back to fuzzing harness
@@ -781,7 +781,6 @@ static bool main_loop_should_exit(int *status)
                 panic_action == PANIC_ACTION_EXIT_FAILURE) {
                 *status = EXIT_FAILURE;
             }
-            printf("222222222222\n");
             return true;
         }
     }
@@ -820,11 +819,12 @@ static bool main_loop_should_exit(int *status)
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-
+    printf("qemu_main_loop\n");
     while (!main_loop_should_exit(&status)) {
+        printf("qemu_main_loop_wait\n");
         main_loop_wait(true);
     }
-
+    printf("qemu_main_loop exit\n");
     return status;
 }
 
