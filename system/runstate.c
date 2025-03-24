@@ -813,7 +813,7 @@ static bool main_loop_should_exit(int *status)
     if (qemu_vmstop_requested(&r)) {
         vm_stop(r);
     }
-    return false;
+    return true;
 }
 
 int qemu_main_loop(void)
