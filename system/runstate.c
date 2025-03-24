@@ -756,7 +756,6 @@ static bool main_loop_should_exit(int *status)
     ShutdownCause request;
 
     if (qemu_debug_requested()) {
-        printf("aaa first_cpu: %x\n", first_cpu->exception_index);
         vm_stop(RUN_STATE_DEBUG);
 
 //// --- Begin LibAFL code ---
@@ -814,7 +813,6 @@ static bool main_loop_should_exit(int *status)
     if (qemu_vmstop_requested(&r)) {
         vm_stop(r);
     }
-    printf("first_cpu: %x\n", first_cpu->exception_index);
     return false;
 }
 
