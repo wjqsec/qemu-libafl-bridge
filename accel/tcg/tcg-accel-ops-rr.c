@@ -109,7 +109,7 @@ static void rr_wait_io_event(void)
 {
     CPUState *cpu;
 
-    while (all_cpu_threads_idle()) {
+    while (all_cpu_threads_idle() && replay_can_wait()) {
         rr_stop_kick_timer();
         qemu_cond_wait_bql(first_cpu->halt_cond);
     }
@@ -259,6 +259,7 @@ static void *rr_cpu_thread_fn(void *arg)
                     icount_prepare_for_run(cpu, cpu_budget);
                 }
                 r = tcg_cpu_exec(cpu);
+                cpu->stop = true;
                 if (icount_enabled()) {
                     icount_process_data(cpu);
                 }
