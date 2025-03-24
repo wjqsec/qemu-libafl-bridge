@@ -93,7 +93,7 @@ bool cpu_thread_is_idle(CPUState *cpu)
         return true;
     }
     if (!cpu->halted || cpu_has_work(cpu)) {
-        printf("2222222222222222 %d %d\n",cpu->halted,cpu_has_work(cpu));
+        printf("2222222222222222 %d %d\n",!cpu->halted,cpu_has_work(cpu));
         return false;
     }
     if (cpus_accel->cpu_thread_is_idle) {
