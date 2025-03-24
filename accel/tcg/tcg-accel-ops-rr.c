@@ -259,7 +259,6 @@ static void *rr_cpu_thread_fn(void *arg)
                     icount_prepare_for_run(cpu, cpu_budget);
                 }
                 r = tcg_cpu_exec(cpu);
-                printf("aaaaa %x\n",r);
                 if (icount_enabled()) {
                     icount_process_data(cpu);
                 }
