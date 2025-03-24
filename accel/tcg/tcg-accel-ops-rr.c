@@ -108,12 +108,12 @@ static void rr_stop_kick_timer(void)
 static void rr_wait_io_event(void)
 {
     CPUState *cpu;
-    printf("rr_wait_io_event  %d  %d %d %d\n",first_cpu->stop, !cpu_work_list_empty(first_cpu), !first_cpu->halted, cpu_has_work(first_cpu));
+
     while (all_cpu_threads_idle() && replay_can_wait()) {
         rr_stop_kick_timer();
         qemu_cond_wait_bql(first_cpu->halt_cond);
     }
-    printf("rr_wait_io_event end  %d  %d %d %d\n",first_cpu->stop, !cpu_work_list_empty(first_cpu), !first_cpu->halted, cpu_has_work(first_cpu));
+
     rr_start_kick_timer();
 
     CPU_FOREACH(cpu) {

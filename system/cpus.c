@@ -86,14 +86,12 @@ bool cpu_work_list_empty(CPUState *cpu)
 bool cpu_thread_is_idle(CPUState *cpu)
 {
     if (cpu->stop || !cpu_work_list_empty(cpu)) {
-        printf("11111111111111 %d %d\n",cpu->stop,!cpu_work_list_empty(cpu));
         return false;
     }
     if (cpu_is_stopped(cpu)) {
         return true;
     }
     if (!cpu->halted || cpu_has_work(cpu)) {
-        printf("2222222222222222 %d %d\n",!cpu->halted,cpu_has_work(cpu));
         return false;
     }
     if (cpus_accel->cpu_thread_is_idle) {
@@ -105,12 +103,14 @@ bool cpu_thread_is_idle(CPUState *cpu)
 bool all_cpu_threads_idle(void)
 {
     CPUState *cpu;
-
+    printf("all_cpu_threads_idle\n");
     CPU_FOREACH(cpu) {
+        printf("111111111111111\n");
         if (!cpu_thread_is_idle(cpu)) {
             return false;
         }
     }
+    printf("all_cpu_threads_idle end\n");
     return true;
 }
 
