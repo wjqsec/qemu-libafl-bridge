@@ -103,14 +103,12 @@ bool cpu_thread_is_idle(CPUState *cpu)
 bool all_cpu_threads_idle(void)
 {
     CPUState *cpu;
-    printf("all_cpu_threads_idle\n");
+
     CPU_FOREACH(cpu) {
-        printf("111111111111111\n");
         if (!cpu_thread_is_idle(cpu)) {
             return false;
         }
     }
-    printf("all_cpu_threads_idle end\n");
     return true;
 }
 
