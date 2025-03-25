@@ -819,7 +819,7 @@ static bool main_loop_should_exit(int *status)
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-
+    printf("qemu_main_loop\n");
     while (!main_loop_should_exit(&status)) {
         main_loop_wait(false);
     }
