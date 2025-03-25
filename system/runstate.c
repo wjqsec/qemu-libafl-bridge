@@ -766,12 +766,10 @@ static bool main_loop_should_exit(int *status)
 
     }
     if (qemu_suspend_requested()) {
-        printf("qemu_suspend_requested");
         qemu_system_suspend();
     }
     request = qemu_shutdown_requested();
     if (request) {
-        printf("qemu_shutdown_requested");
         qemu_kill_report();
         qemu_system_shutdown(request);
         if (shutdown_action == SHUTDOWN_ACTION_PAUSE) {
@@ -788,7 +786,6 @@ static bool main_loop_should_exit(int *status)
     }
     request = qemu_reset_requested();
     if (request) {
-        printf("qemu_reset_requested");
         pause_all_vcpus();
         qemu_system_reset(request);
         resume_all_vcpus();
@@ -803,7 +800,6 @@ static bool main_loop_should_exit(int *status)
         }
     }
     if (qemu_wakeup_requested()) {
-        printf("qemu_wakeup_requested");
         pause_all_vcpus();
         qemu_system_wakeup();
         notifier_list_notify(&wakeup_notifiers, &wakeup_reason);
@@ -812,11 +808,9 @@ static bool main_loop_should_exit(int *status)
         qapi_event_send_wakeup();
     }
     if (qemu_powerdown_requested()) {
-        printf("qemu_powerdown_requested");
         qemu_system_powerdown();
     }
     if (qemu_vmstop_requested(&r)) {
-        printf("qemu_vmstop_requested");
         vm_stop(r);
     }
     return false;
