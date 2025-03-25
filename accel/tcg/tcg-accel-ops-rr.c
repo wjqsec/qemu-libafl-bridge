@@ -297,7 +297,7 @@ static void *rr_cpu_thread_fn(void *arg)
              */
             qemu_notify_event();
         }
-        printf("rr_cpu_thread_fn\n");
+
         rr_wait_io_event();
         rr_deal_with_unplugged_cpus();
     }
