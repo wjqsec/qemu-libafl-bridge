@@ -511,8 +511,6 @@ bool timerlist_run_timers(QEMUTimerList *timer_list)
     }
 
     qemu_event_reset(&timer_list->timers_done_ev);
-    qemu_event_set(&timer_list->timers_done_ev);
-    return false;
     if (!timer_list->clock->enabled) {
         goto out;
     }
@@ -575,7 +573,9 @@ bool timerlist_run_timers(QEMUTimerList *timer_list)
 
         /* run the callback (the timer list can be modified) */
         qemu_mutex_unlock(&timer_list->active_timers_lock);
-        cb(opaque);
+        // cb(opaque);
+        (void)cb;
+        (void)opaque;
         qemu_mutex_lock(&timer_list->active_timers_lock);
 
         progress = true;
