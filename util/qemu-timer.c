@@ -574,6 +574,8 @@ bool timerlist_run_timers(QEMUTimerList *timer_list)
         /* run the callback (the timer list can be modified) */
         qemu_mutex_unlock(&timer_list->active_timers_lock);
         // cb(opaque);
+        (void)cb;
+        (void)opaque;
         qemu_mutex_lock(&timer_list->active_timers_lock);
 
         progress = true;
