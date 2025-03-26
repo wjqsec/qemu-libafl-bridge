@@ -532,7 +532,7 @@ bool timerlist_run_timers(QEMUTimerList *timer_list)
         }
         break;
     }
-    return false;
+
     /*
      * Extract expired timers from active timers list and process them.
      *
