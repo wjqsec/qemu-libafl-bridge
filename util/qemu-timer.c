@@ -581,9 +581,8 @@ bool timerlist_run_timers(QEMUTimerList *timer_list)
     qemu_mutex_unlock(&timer_list->active_timers_lock);
 
 out:
-    qemu_event_set(&timer_list->timers_done_ev);
-    (void)progress;
-    return false;
+    // qemu_event_set(&timer_list->timers_done_ev);
+    return progress;
 }
 
 bool qemu_clock_run_timers(QEMUClockType type)
