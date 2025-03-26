@@ -582,6 +582,7 @@ bool timerlist_run_timers(QEMUTimerList *timer_list)
 
 out:
     qemu_event_set(&timer_list->timers_done_ev);
+    (void)progress;
     return false;
 }
 
