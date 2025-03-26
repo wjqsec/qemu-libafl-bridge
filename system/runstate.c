@@ -815,16 +815,21 @@ static bool main_loop_should_exit(int *status)
     }
     return false;
 }
-
+int maxx = 0;
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-    printf("qemu_main_loop\n");
+    int mayy = 0;
     while (!main_loop_should_exit(&status)) {
-        printf("main_loop_wait\n");
+        mayy++;
         main_loop_wait(false);
     }
-    printf("qemu_main_loop end\n");
+    if (mayy > maxx) {
+        printf("maxxxxxxx :%d\n",mayy);
+        maxx = mayy;
+    }
+        
+
     return status;
 }
 
