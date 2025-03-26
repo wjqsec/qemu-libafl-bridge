@@ -277,7 +277,7 @@ static void pit_irq_timer_update(PITChannelState *s, int64_t current_time)
 static void pit_irq_timer(void *opaque)
 {
     PITChannelState *s = opaque;
-    return;
+
     pit_irq_timer_update(s, s->next_transition_time);
 }
 

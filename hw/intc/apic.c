@@ -783,7 +783,7 @@ static void apic_timer_update(APICCommonState *s, int64_t current_time)
 static void apic_timer(void *opaque)
 {
     APICCommonState *s = opaque;
-    return;
+
     apic_local_deliver(s, APIC_LVT_TIMER);
     apic_timer_update(s, s->next_time);
 }
