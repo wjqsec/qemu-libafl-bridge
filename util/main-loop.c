@@ -597,7 +597,7 @@ void main_loop_wait(int nonblocking)
          */
         icount_start_warp_timer();
     }
-    // qemu_clock_run_all_timers();
+    qemu_clock_run_all_timers();
 }
 
 /* Functions to operate on the main QEMU AioContext.  */
