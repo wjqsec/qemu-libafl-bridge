@@ -241,7 +241,7 @@ static void *rr_cpu_thread_fn(void *arg)
         if (!cpu) {
             cpu = first_cpu;
         }
-
+        int rrr;
         while (cpu && cpu_work_list_empty(cpu) && !cpu->exit_request) {
             /* Store rr_current_cpu before evaluating cpu_can_run().  */
             qatomic_set_mb(&rr_current_cpu, cpu);
@@ -259,6 +259,7 @@ static void *rr_cpu_thread_fn(void *arg)
                     icount_prepare_for_run(cpu, cpu_budget);
                 }
                 r = tcg_cpu_exec(cpu);
+                rrr = r;
                 if (icount_enabled()) {
                     icount_process_data(cpu);
                 }
@@ -297,8 +298,9 @@ static void *rr_cpu_thread_fn(void *arg)
              */
             qemu_notify_event();
         }
-
+        printf("rr_wait_io_event %x\n",rrr);
         rr_wait_io_event();
+        printf("rr_wait_io_event end\n");
         rr_deal_with_unplugged_cpus();
     }
 
