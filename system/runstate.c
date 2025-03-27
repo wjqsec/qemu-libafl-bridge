@@ -387,15 +387,15 @@ void vm_state_notify(bool running, RunState state)
     }
 }
 
-static ShutdownCause reset_requested;
-static ShutdownCause shutdown_requested;
-static int shutdown_exit_code = EXIT_SUCCESS;
-static int shutdown_signal;
-static pid_t shutdown_pid;
-static int powerdown_requested;
-static int debug_requested;
-static int suspend_requested;
-static WakeupReason wakeup_reason;
+static _Atomic ShutdownCause reset_requested;
+static _Atomic ShutdownCause shutdown_requested;
+static _Atomic  int shutdown_exit_code = EXIT_SUCCESS;
+static _Atomic int shutdown_signal;
+static _Atomic pid_t shutdown_pid;
+static _Atomic int powerdown_requested;
+static _Atomic int debug_requested;
+static _Atomic int suspend_requested;
+static _Atomic WakeupReason wakeup_reason;
 static NotifierList powerdown_notifiers =
     NOTIFIER_LIST_INITIALIZER(powerdown_notifiers);
 static NotifierList suspend_notifiers =
