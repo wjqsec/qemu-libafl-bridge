@@ -464,14 +464,14 @@ static int qemu_suspend_requested(void)
 
 static WakeupReason qemu_wakeup_requested(void)
 {
-    return wakeup_reason;
+    return qatomic_read(&wakeup_reason);
 }
 
 static int qemu_powerdown_requested(void)
 {
-    int r = powerdown_requested;
-    powerdown_requested = 0;
-    return r;
+    // int r = powerdown_requested;
+    // powerdown_requested = 0;
+    return qatomic_xchg(&powerdown_requested, 0);
 }
 
 static int qemu_debug_requested(void)
@@ -637,7 +637,8 @@ void qemu_system_wakeup_request(WakeupReason reason, Error **errp)
         return;
     }
     runstate_set(RUN_STATE_RUNNING);
-    wakeup_reason = reason;
+    qatomic_set(&wakeup_reason, reason);
+    // wakeup_reason = reason;
     qemu_notify_event();
 }
 
@@ -730,7 +731,8 @@ static void qemu_system_shutdown(ShutdownCause cause)
 void qemu_system_powerdown_request(void)
 {
     trace_qemu_system_powerdown_request();
-    powerdown_requested = 1;
+    qatomic_set(&powerdown_requested,1);
+    // powerdown_requested = 1;
     qemu_notify_event();
 }
 
