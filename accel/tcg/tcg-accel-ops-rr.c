@@ -301,6 +301,7 @@ static void *rr_cpu_thread_fn(void *arg)
         // printf("rr_wait_io_event %x\n",rrr);
         rr_wait_io_event();
         // printf("rr_wait_io_event end\n");
+        (void)rrr;
         rr_deal_with_unplugged_cpus();
     }
 
