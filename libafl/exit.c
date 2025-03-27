@@ -76,7 +76,7 @@ static void prepare_qemu_exit(CPUState* cpu, target_ulong next_pc)
     expected_exit = true;
     last_exit_reason.cpu = cpu;
     last_exit_reason.next_pc = next_pc;
-    // printf("prepare_qemu_exit\n");
+
 #ifndef CONFIG_USER_ONLY
     qemu_system_debug_request();
     cpu->stopped = true; // TODO check if still needed
