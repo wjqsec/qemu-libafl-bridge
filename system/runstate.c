@@ -476,9 +476,9 @@ static int qemu_powerdown_requested(void)
 
 static int qemu_debug_requested(void)
 {
-    int r = debug_requested;
-    debug_requested = 0;
-    return r;
+    // int r = debug_requested;
+    // debug_requested = 0;
+    return qatomic_xchg(&debug_requested, 0);
 }
 
 /*
@@ -746,7 +746,8 @@ void qemu_register_shutdown_notifier(Notifier *notifier)
 
 void qemu_system_debug_request(void)
 {
-    debug_requested = 1;
+    qatomic_set(&debug_requested,1);
+    // debug_requested = 1;
     qemu_notify_event();
 }
 
@@ -819,11 +820,11 @@ static bool main_loop_should_exit(int *status)
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-    printf("qemu_main_loop\n");
+    // printf("qemu_main_loop\n");
     while (!main_loop_should_exit(&status)) {
         main_loop_wait(false);
     }
-    printf("qemu_main_loop end\n");
+    // printf("qemu_main_loop end\n");
     return status;
 }
 
