@@ -41,17 +41,16 @@ static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
     if (l < 4 || !memory_access_is_direct(mr, false)) {
         release_lock |= prepare_mmio_access(mr);
 
-        /* I/O case */
-        io_handled = true;
+        //// --- Begin LibAFL code ---
+        bool handled = false;
+        r = MEMTX_OK;
+        if (libafl_post_devicereg_read_hooks)
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val, &handled);
+        if (!handled)
+        //// --- End LibAFL code ---
         r = memory_region_dispatch_read(mr, addr1, &val,
                                         MO_32 | devend_memop(endian), attrs);
-        //// --- Begin LibAFL code ---
-        if (libafl_post_devicereg_read_hooks)
-        {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
-            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 4, (uint8_t*)&val, temp_r);
-        }
-        //// --- End LibAFL code ---
+
 
     } else {
         /* RAM case */
@@ -119,17 +118,15 @@ static inline uint64_t glue(address_space_ldq_internal, SUFFIX)(ARG1_DECL,
     if (l < 8 || !memory_access_is_direct(mr, false)) {
         release_lock |= prepare_mmio_access(mr);
 
-        /* I/O case */
-        io_handled = true;
+        //// --- Begin LibAFL code ---
+        bool handled = false;
+        r = MEMTX_OK;
+        if (libafl_post_devicereg_read_hooks)
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val, &handled);
+        if (!handled)
+        //// --- End LibAFL code ---
         r = memory_region_dispatch_read(mr, addr1, &val,
                                         MO_64 | devend_memop(endian), attrs);
-        //// --- Begin LibAFL code ---
-        if (libafl_post_devicereg_read_hooks)
-        {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
-            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 8, (uint8_t*)&val, temp_r);
-        }
-        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 8, mr);
@@ -194,16 +191,14 @@ uint8_t glue(address_space_ldub, SUFFIX)(ARG1_DECL,
     if (!memory_access_is_direct(mr, false)) {
         release_lock |= prepare_mmio_access(mr);
 
-        /* I/O case */
-        io_handled = true;
-        r = memory_region_dispatch_read(mr, addr1, &val, MO_8, attrs);
         //// --- Begin LibAFL code ---
+        bool handled = false;
+        r = MEMTX_OK;
         if (libafl_post_devicereg_read_hooks)
-        {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
-            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val, temp_r);
-        }
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 1, (uint8_t*)&val, &handled);
+        if (!handled)
         //// --- End LibAFL code ---
+        r = memory_region_dispatch_read(mr, addr1, &val, MO_8, attrs);
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 1, mr);
@@ -239,17 +234,15 @@ static inline uint16_t glue(address_space_lduw_internal, SUFFIX)(ARG1_DECL,
     if (l < 2 || !memory_access_is_direct(mr, false)) {
         release_lock |= prepare_mmio_access(mr);
 
-        /* I/O case */
-        io_handled = true;
+        //// --- Begin LibAFL code ---
+        bool handled = false;
+        r = MEMTX_OK;
+        if (libafl_post_devicereg_read_hooks)
+            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val, &handled);
+        if (!handled)
+        //// --- End LibAFL code ---
         r = memory_region_dispatch_read(mr, addr1, &val,
                                         MO_16 | devend_memop(endian), attrs);
-        //// --- Begin LibAFL code ---
-        if (libafl_post_devicereg_read_hooks)
-        {
-            MemTxResult temp_r = io_handled == false ? MEMTX_ERROR : r;
-            libafl_post_devicereg_read_hooks->callback(libafl_post_devicereg_read_hooks->data, mr->addr, addr1, 2, (uint8_t*)&val, temp_r);
-        }
-        //// --- End LibAFL code ---
     } else {
         /* RAM case */
         fuzz_dma_read_cb(addr, 2, mr);

@@ -10,7 +10,6 @@
 #define LIBAFL_TABLES_SIZE 16384
 #define LIBAFL_TABLES_HASH(p) (((13*((size_t)(p))) ^ (((size_t)(p)) >> 15)) % LIBAFL_TABLES_SIZE)
 #define LIBAFL_MAX_INSNS 16
-extern bool io_handled;
 extern bool x86_in_smm_mode;
 void tcg_gen_callN(TCGHelperInfo *info, TCGTemp *ret, TCGTemp **args);
 
@@ -229,11 +228,11 @@ void libafl_tcg_gen_asan(TCGTemp * addr, size_t size);
 
 
 struct libafl_post_devicereg_read_hook {
-    void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, uint32_t handled);
+    void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool *handled);
     uint64_t data;
 };
 extern struct libafl_post_devicereg_read_hook* libafl_post_devicereg_read_hooks;
-size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, uint32_t handled),
+size_t libafl_add_post_devicereg_read_hook(void (*callback)(uint64_t data, target_ulong device_base, target_ulong device_offset, size_t size, uint8_t *val, bool *handled),
                                         uint64_t data);
 int libafl_qemu_remove_post_devicereg_read_hook(size_t num, int invalidate);
 

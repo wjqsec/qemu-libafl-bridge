@@ -822,7 +822,9 @@ static bool main_loop_should_exit(int *status)
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-    while (!main_loop_should_exit(&status)) {
+    int num_loop = 0;
+    while (!main_loop_should_exit(&status) && num_loop < 200000) {
+        num_loop++;
         main_loop_wait(false);
     }
     return status;
