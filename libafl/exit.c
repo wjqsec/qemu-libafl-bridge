@@ -59,7 +59,7 @@ static THREAD_MODIFIER bool expected_exit = false;
 // called before exiting the cpu exec with the custom exception
 void libafl_sync_exit_cpu(void)
 {
-    if (last_exit_reason.next_pc) {
+    if (last_exit_reason.next_pc && last_exit_reason.cpu) {
         CPUClass* cc = CPU_GET_CLASS(last_exit_reason.cpu);
         cc->set_pc(last_exit_reason.cpu, THUMB_MASK(last_exit_reason.cpu, last_exit_reason.next_pc));
     }
