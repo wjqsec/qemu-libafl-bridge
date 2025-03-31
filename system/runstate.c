@@ -823,7 +823,7 @@ int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
     int num_loop = 0;
-    while (!main_loop_should_exit(&status) && num_loop < 200000) {
+    while (!main_loop_should_exit(&status) && num_loop < 20000) {
         num_loop++;
         main_loop_wait(false);
     }
