@@ -828,7 +828,7 @@ int qemu_main_loop(void)
         main_loop_wait(false);
         if (num_loop++ > 50000) {
             qemu_system_debug_request();
-            cpu->stopped = true; // TODO check if still needed
+            first_cpu->stopped = true; // TODO check if still needed
         }
             
     }
