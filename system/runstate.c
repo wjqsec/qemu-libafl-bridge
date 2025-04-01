@@ -822,10 +822,11 @@ static bool main_loop_should_exit(int *status)
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-    // int num_loop = 0;
-    while (!main_loop_should_exit(&status) && !first_cpu->stopped) {
-        // num_loop++;
+    int num_loop = 0;
+    while (!main_loop_should_exit(&status)) {
         main_loop_wait(false);
+        if (num_loop++ > 20000)
+            libafl_qemu_exit_timeout(first_cpu);
     }
     return status;
 }
