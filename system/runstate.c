@@ -826,8 +826,11 @@ int qemu_main_loop(void)
     int num_loop = 0;
     while (!main_loop_should_exit(&status)) {
         main_loop_wait(false);
-        if (num_loop++ > 20000)
-            libafl_qemu_exit_timeout(first_cpu);
+        if (num_loop++ > 50000) {
+            qemu_system_debug_request();
+            cpu->stopped = true; // TODO check if still needed
+        }
+            
     }
     return status;
 }
