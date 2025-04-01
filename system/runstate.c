@@ -72,6 +72,7 @@ static QemuMutex vmstop_lock;
 
 //// --- Begin LibAFL code ---
 void libafl_exit_request_internal(CPUState* cpu, uint64_t pc, ShutdownCause cause, int signal);
+void libafl_qemu_exit_timeout(CPUState* cpu);
 //// --- End LibAFL code ---
 
 typedef struct {
