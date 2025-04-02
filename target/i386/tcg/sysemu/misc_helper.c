@@ -27,6 +27,7 @@
 #include "tcg/helper-tcg.h"
 #include "hw/i386/apic.h"
 #include "libafl/hook.h"
+#include "libafl/exit.h"
 void helper_outb(CPUX86State *env, uint32_t port, uint32_t data)
 {
     address_space_stb(&address_space_io, port, data,
