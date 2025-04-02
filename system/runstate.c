@@ -590,9 +590,9 @@ void qemu_system_reset_request(ShutdownCause reason)
     }
 
 //// --- Begin LibAFL code ---
-    if (current_cpu) {
-        CPUClass *cc = CPU_GET_CLASS(current_cpu);
-        libafl_exit_request_internal(current_cpu, cc->get_pc(current_cpu), shutdown_requested, -1);
+    if (first_cpu) {
+        CPUClass *cc = CPU_GET_CLASS(first_cpu);
+        libafl_exit_request_internal(first_cpu, cc->get_pc(first_cpu), shutdown_requested, -1);
     } else {
         libafl_exit_request_internal(NULL, 0, shutdown_requested, -1);
     }
@@ -681,9 +681,9 @@ void qemu_system_killed(int signal, pid_t pid)
     shutdown_requested = SHUTDOWN_CAUSE_HOST_SIGNAL;
 
 //// --- Begin LibAFL code ---
-    if (current_cpu) {
-        CPUClass *cc = CPU_GET_CLASS(current_cpu);
-        libafl_exit_request_internal(current_cpu, cc->get_pc(current_cpu), shutdown_requested, signal);
+    if (first_cpu) {
+        CPUClass *cc = CPU_GET_CLASS(first_cpu);
+        libafl_exit_request_internal(first_cpu, cc->get_pc(first_cpu), shutdown_requested, signal);
     } else {
         libafl_exit_request_internal(NULL, 0, shutdown_requested, signal);
     }
@@ -706,9 +706,9 @@ void qemu_system_shutdown_request(ShutdownCause reason)
     shutdown_requested = reason;
 
 //// --- Begin LibAFL code ---
-    if (current_cpu) {
-        CPUClass *cc = CPU_GET_CLASS(current_cpu);
-        libafl_exit_request_internal(current_cpu, cc->get_pc(current_cpu), shutdown_requested, -1);
+    if (first_cpu) {
+        CPUClass *cc = CPU_GET_CLASS(first_cpu);
+        libafl_exit_request_internal(first_cpu, cc->get_pc(first_cpu), shutdown_requested, -1);
     } else {
         libafl_exit_request_internal(NULL, 0, shutdown_requested, -1);
     }
