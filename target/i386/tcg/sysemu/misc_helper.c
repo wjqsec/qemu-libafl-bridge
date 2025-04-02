@@ -27,7 +27,6 @@
 #include "tcg/helper-tcg.h"
 #include "hw/i386/apic.h"
 #include "libafl/hook.h"
-#include "libafl/exit.h"
 void helper_outb(CPUX86State *env, uint32_t port, uint32_t data)
 {
     address_space_stb(&address_space_io, port, data,
@@ -533,15 +532,15 @@ void helper_flush_page(CPUX86State *env, target_ulong addr)
     tlb_flush_page(env_cpu(env), addr);
 }
 
-
+static G_NORETURN
 void do_hlt(CPUX86State *env)
 {
     CPUState *cs = env_cpu(env);
-    libafl_qemu_exit_timeout(cs);
-    // env->hflags &= ~HF_INHIBIT_IRQ_MASK; /* needed if sti is just before */
-    // cs->halted = 1;
-    // cs->exception_index = EXCP_HLT;
-    // cpu_loop_exit(cs);
+    printf("do do do HLT\n");
+    env->hflags &= ~HF_INHIBIT_IRQ_MASK; /* needed if sti is just before */
+    cs->halted = 1;
+    cs->exception_index = EXCP_HLT;
+    cpu_loop_exit(cs);
 }
 
 G_NORETURN void helper_hlt(CPUX86State *env, int next_eip_addend)

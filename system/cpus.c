@@ -606,6 +606,7 @@ void cpu_resume(CPUState *cpu)
 {
     cpu->stop = false;
     cpu->stopped = false;
+    cpu->halted = false;
     qemu_cpu_kick(cpu);
 }
 
