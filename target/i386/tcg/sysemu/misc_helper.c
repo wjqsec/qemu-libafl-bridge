@@ -537,7 +537,6 @@ static G_NORETURN
 void do_hlt(CPUX86State *env)
 {
     CPUState *cs = env_cpu(env);
-    printf("do_hlt do_hlt do_hlt\n");
     libafl_qemu_exit_timeout(cs);
     // env->hflags &= ~HF_INHIBIT_IRQ_MASK; /* needed if sti is just before */
     // cs->halted = 1;
@@ -549,7 +548,6 @@ G_NORETURN void helper_hlt(CPUX86State *env, int next_eip_addend)
 {
     cpu_svm_check_intercept_param(env, SVM_EXIT_HLT, 0, GETPC());
     env->eip += next_eip_addend;
-    printf("helper_hlt\n");
     do_hlt(env);
 }
 
@@ -565,7 +563,6 @@ void helper_monitor(CPUX86State *env, target_ulong ptr)
 G_NORETURN void helper_mwait(CPUX86State *env, int next_eip_addend)
 {
     CPUState *cs = env_cpu(env);
-    printf("helper_mwait\n");
     if ((uint32_t)env->regs[R_ECX] != 0) {
         raise_exception_ra(env, EXCP0D_GPF, GETPC());
     }
