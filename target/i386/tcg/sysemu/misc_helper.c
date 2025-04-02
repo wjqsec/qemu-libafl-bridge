@@ -533,7 +533,7 @@ void helper_flush_page(CPUX86State *env, target_ulong addr)
     tlb_flush_page(env_cpu(env), addr);
 }
 
-static G_NORETURN
+
 void do_hlt(CPUX86State *env)
 {
     CPUState *cs = env_cpu(env);
