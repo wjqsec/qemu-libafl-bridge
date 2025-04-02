@@ -536,7 +536,7 @@ static G_NORETURN
 void do_hlt(CPUX86State *env)
 {
     CPUState *cs = env_cpu(env);
-
+    printf("do do do HLT\n");
     env->hflags &= ~HF_INHIBIT_IRQ_MASK; /* needed if sti is just before */
     cs->halted = 1;
     cs->exception_index = EXCP_HLT;

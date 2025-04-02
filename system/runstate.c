@@ -823,14 +823,8 @@ static bool main_loop_should_exit(int *status)
 int qemu_main_loop(void)
 {
     int status = EXIT_SUCCESS;
-    int num_loop = 0;
     while (!main_loop_should_exit(&status)) {
-        main_loop_wait(false);
-        if (num_loop++ > 50000) {
-            qemu_system_debug_request();
-            first_cpu->stopped = true; // TODO check if still needed
-        }
-            
+        main_loop_wait(false);    
     }
     return status;
 }
