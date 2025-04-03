@@ -60,7 +60,11 @@ static THREAD_MODIFIER bool expected_exit = false;
 void libafl_sync_exit_cpu(void)
 {
     if (last_exit_reason.next_pc && last_exit_reason.cpu) {
+        #if defined(TARGET_I386)
         cpu_env(last_exit_reason.cpu)->eip = last_exit_reason.next_pc;
+        #else
+        #error "Only support x86 now"
+        #endif
         // CPUClass* cc = CPU_GET_CLASS(first_cpu);
         // cc->set_pc(first_cpu, THUMB_MASK(first_cpu, last_exit_reason.next_pc));
     }
