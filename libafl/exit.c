@@ -60,8 +60,8 @@ static THREAD_MODIFIER bool expected_exit = false;
 void libafl_sync_exit_cpu(void)
 {
     if (last_exit_reason.next_pc && last_exit_reason.cpu) {
-        CPUClass* cc = CPU_GET_CLASS(last_exit_reason.cpu);
-        cc->set_pc(last_exit_reason.cpu, THUMB_MASK(last_exit_reason.cpu, last_exit_reason.next_pc));
+        CPUClass* cc = CPU_GET_CLASS(first_cpu);
+        cc->set_pc(first_cpu, THUMB_MASK(first_cpu, last_exit_reason.next_pc));
     }
     last_exit_reason.next_pc = 0;
 }
