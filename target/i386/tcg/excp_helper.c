@@ -103,13 +103,13 @@ void raise_interrupt2(CPUX86State *env, int intno,
     } else {
         cpu_svm_check_intercept_param(env, SVM_EXIT_SWINT, 0, retaddr);
     }
-    libafl_qemu_exit_timeout(cs);
-    cpu_loop_exit(cs);
-    // cs->exception_index = intno;
-    // env->error_code = error_code;
-    // env->exception_is_int = is_int;
-    // env->exception_next_eip = env->eip + next_eip_addend;
-    // cpu_loop_exit_restore(cs, retaddr);
+    // libafl_qemu_exit_timeout(cs);
+    // cpu_loop_exit(cs);
+    cs->exception_index = intno;
+    env->error_code = error_code;
+    env->exception_is_int = is_int;
+    env->exception_next_eip = env->eip + next_eip_addend;
+    cpu_loop_exit_restore(cs, retaddr);
 }
 
 /* shortcuts to generate exceptions */
