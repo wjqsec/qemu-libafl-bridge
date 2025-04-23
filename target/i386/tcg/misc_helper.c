@@ -24,6 +24,7 @@
 #include "exec/exec-all.h"
 #include "helper-tcg.h"
 #include "libafl/hook.h"
+#include "libafl/exit.h"
 /*
  * NOTE: the translator must set DisasContext.cc_op to CC_OP_EFLAGS
  * after generating a call to a helper that uses this.
@@ -99,7 +100,8 @@ G_NORETURN void do_pause(CPUX86State *env)
     CPUState *cs = env_cpu(env);
 
     /* Just let another CPU run.  */
-    cs->exception_index = EXCP_INTERRUPT;
+    // cs->exception_index = EXCP_INTERRUPT;
+    libafl_qemu_exit_timeout(cs);
     cpu_loop_exit(cs);
 }
 
