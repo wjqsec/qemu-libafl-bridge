@@ -100,8 +100,8 @@ G_NORETURN void do_pause(CPUX86State *env)
     CPUState *cs = env_cpu(env);
 
     /* Just let another CPU run.  */
-    // cs->exception_index = EXCP_INTERRUPT;
-    libafl_qemu_exit_timeout(cs);
+    cs->exception_index = EXCP_INTERRUPT;
+    // libafl_qemu_exit_timeout(cs);
     cpu_loop_exit(cs);
 }
 
