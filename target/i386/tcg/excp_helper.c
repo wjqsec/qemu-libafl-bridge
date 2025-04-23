@@ -24,7 +24,8 @@
 #include "sysemu/runstate.h"
 #include "exec/helper-proto.h"
 #include "helper-tcg.h"
-
+#include "libafl/hook.h"
+#include "libafl/exit.h"
 G_NORETURN void helper_raise_interrupt(CPUX86State *env, int intno,
                                           int next_eip_addend)
 {
